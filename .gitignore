@@ -1,3 +1,9 @@
+.sass-cache
+.tmp
+node_modules
+app/bower_components
+.idea
+
 # Windows image file caches
 Thumbs.db
 ehthumbs.db
@@ -26,7 +32,8 @@ $RECYCLE.BIN/
 .LSOverride
 
 # Icon must end with two \r
-Icon
+Icon
+
 
 # Thumbnails
 ._*

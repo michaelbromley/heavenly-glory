@@ -1,0 +1,1 @@
+var outputCanvas=document.querySelector("#output");hgEngine.init(outputCanvas);
