@@ -1,5 +1,5 @@
 /**
- * The Motion Detector object takes a canvas context as an input to the
+ * The Motion Detector module takes a canvas context as an input to the
  * `analyze()` method, and examines any motion that has occurred since the last
  * call to `analyze()`.
  *
@@ -15,9 +15,10 @@
  * @returns {{analyze: analyze}}
  * @constructor
  */
-function MotionDetector(userOptions) {
+var motionDetector = (function() {
 
-    var canvasBlend,
+    var module = {},
+        canvasBlend,
         contextBlend,
         lastImageData,
         regions = [],
@@ -33,15 +34,17 @@ function MotionDetector(userOptions) {
             sensitivity: 50
         };
 
-    init();
-
-    function init() {
+    /**
+     * Initialize the motion detector module and specify options.
+     * @param userOptions
+     */
+    module.init = function(userOptions) {
         options = mergeOptions(userOptions, defaultOptions);
         w = options.width;
         h = options.height;
         createBlendCanvas();
         createRegions(options.horizontalRegions, options.verticalRegions);
-    }
+    };
 
     /**
      * Merge any user options with the defaultOptions and return the resulting object.
@@ -246,7 +249,7 @@ function MotionDetector(userOptions) {
      * @param showDebugData
      * @returns {Array}
      */
-    function analyze(contextOut, showDebugData) {
+    module.analyze = function(contextOut, showDebugData) {
         var motionByRegion,
             motionData;
 
@@ -259,10 +262,8 @@ function MotionDetector(userOptions) {
         }
 
         return motionByRegion;
-    }
-
-    // public API
-    return {
-        analyze: analyze
     };
-}
+
+    return module;
+
+})();

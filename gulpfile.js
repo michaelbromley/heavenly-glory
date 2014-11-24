@@ -20,6 +20,7 @@ gulp.task('styles', function () {
 gulp.task('engine', function() {
     return gulp.src([
         'app/scripts/engine/motionDetector.js',
+        'app/scripts/engine/sfx.js',
         'app/scripts/engine/engine.js'
     ])
         .pipe($.concat('engine.js'))

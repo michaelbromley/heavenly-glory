@@ -11,15 +11,18 @@ var hgEngine = (function() {
         canvasOut,
         contextOut,
         w,
-        h,
-        motionDetector;
+        h;
 
     module.init = function(outputElement, width, height) {
         w = width;
         h = height;
         canvasOut = outputElement;
         contextOut = canvasOut.getContext('2d');
-        motionDetector = new MotionDetector();
+        motionDetector.init({
+            width: w,
+            height: h
+        });
+        sfx.loadSounds();
         createVideoElement();
         startCapturing();
     };
@@ -91,7 +94,7 @@ var hgEngine = (function() {
 
         drawVideo();
         motionData = motionDetector.analyze(contextOut, true);
-
+        sfx.generate(motionData);
         requestAnimationFrame(update);
     }
 

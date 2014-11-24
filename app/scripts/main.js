@@ -3,4 +3,4 @@
  */
 
 var outputCanvas = document.querySelector('#output');
-hgEngine.init(outputCanvas, 640, 480);
+hgEngine.init(outputCanvas, 320, 240);
