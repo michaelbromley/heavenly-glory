@@ -24,14 +24,15 @@ var motionDetector = (function() {
     var module = {},
         canvasBlend,
         contextBlend,
+        contextScale,
         lastImageData,
         regions = [],
         w,
         h,
         options,
         defaultOptions = {
-            width: 640,
-            height: 480,
+            width: 320,
+            height: 240,
             horizontalRegions: 3,
             verticalRegions: 3,
             displayDebugCanvas: true,
@@ -47,6 +48,7 @@ var motionDetector = (function() {
         w = options.width;
         h = options.height;
         createBlendCanvas();
+        createScaleCanvas();
         createRegions(options.horizontalRegions, options.verticalRegions);
     };
 
@@ -84,6 +86,18 @@ var motionDetector = (function() {
         if (options.displayDebugCanvas) {
             document.body.appendChild(canvasBlend);
         }
+    }
+
+    /**
+     * This context is used to scale the video feed canvas (contextOut) down to the same size as the
+     * blend canvas, so we can sample the entire image but at a much smaller resolution, allowing for faster
+     * calculation of the motion regions.
+     */
+    function createScaleCanvas() {
+        var c = document.createElement('canvas');
+        c.setAttribute('width', w);
+        c.setAttribute('height', h);
+        contextScale = c.getContext('2d');
     }
 
 
@@ -204,6 +218,7 @@ var motionDetector = (function() {
         lastImageData = sourceData;
 
         return blendedData;
+        //return sourceData;
     }
 
     function differenceAccuracy(target, data1, data2) {
@@ -243,6 +258,11 @@ var motionDetector = (function() {
         return (value > options.sensitivity) ? 255 : 0;
     }
 
+    function scaleContextOut(contextOut) {
+        contextScale.drawImage(contextOut.canvas, 0, 0, w, h);
+        return contextScale;
+    }
+
     /**
      * Given a canvas context, compare the current frame against the frame from the last call to this function, and
      * return an array of the percentage of changed pixels in each region of the canvas.
@@ -255,9 +275,11 @@ var motionDetector = (function() {
      */
     module.analyze = function(contextOut, showDebugData) {
         var motionByRegion,
-            motionData;
+            motionData,
+            scaledContext;
 
-        motionData = doBlend(contextOut);
+        scaledContext = scaleContextOut(contextOut);
+        motionData = doBlend(scaledContext);
         motionByRegion = detectMotionByRegion(motionData.data);
 
         if (showDebugData) {
@@ -276,7 +298,9 @@ var sfx = (function() {
     var module = {},
         sounds = {},
         masterGain,
-        context;
+        context,
+        areaWidth = 640,
+        areaHeight = 480;
 
     // Fix up prefixing
     window.AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -284,12 +308,26 @@ var sfx = (function() {
     masterGain = context.createGain();
     masterGain.connect(context.destination);
 
-    module.loadSounds = function(callback) {
+    module.loadSounds = function() {
         var bufferLoader = new BufferLoader(
             context,
             [
-                'assets/audio/swoosh-01.mp3',
-                'assets/audio/punch-01.mp3'
+                'assets/audio/swoosh-soft-01.mp3',
+                'assets/audio/swoosh-soft-02.mp3',
+                'assets/audio/swoosh-soft-03.mp3',
+                'assets/audio/swoosh-hard-01.mp3',
+                'assets/audio/swoosh-hard-02.mp3',
+                'assets/audio/swoosh-hard-03.mp3',
+                'assets/audio/swoosh-hard-04.mp3',
+                'assets/audio/swoosh-hard-05.mp3',
+                'assets/audio/swoosh-hard-06.mp3',
+                'assets/audio/punch-hard-01.mp3',
+                'assets/audio/punch-hard-02.mp3',
+                'assets/audio/punch-hard-03.mp3',
+                'assets/audio/punch-hard-04.mp3',
+                'assets/audio/punch-hard-05.mp3',
+                'assets/audio/punch-hard-06.mp3',
+                'assets/audio/punch-hard-07.mp3'
             ],
             finishedLoading
         );
@@ -298,21 +336,42 @@ var sfx = (function() {
     };
 
     function finishedLoading(bufferList) {
-        var swoosh, punch;
-
         // create the various soundsets from the loaded samples
-        swoosh = new SoundSet();
-        swoosh.addSound(new Sound(bufferList[0], context, masterGain));
-        sounds.swoosh = swoosh;
-
-        punch = new SoundSet();
-        punch.addSound(new Sound(bufferList[1], context, masterGain));
-        sounds.punch = punch;
-
-        if (callback) {
-            callback();
-        }
+        sounds.swooshSoft = addSoundsFromBufferList(bufferList, 0, 2);
+        sounds.swooshHard = addSoundsFromBufferList(bufferList, 3, 8);
+        sounds.punchHard = addSoundsFromBufferList(bufferList, 9, 15);
     }
+
+    function addSoundsFromBufferList(bufferList, start, end) {
+        var i,
+            newSound,
+            soundSet = new SoundSet();
+
+        for (i = start; i <= end; i++ ) {
+            newSound = new Sound(bufferList[i], context, masterGain);
+            newSound.setPannerParameters({
+                coneOuterGain: 0.1,
+                coneOuterAngle: 1,
+                coneInnerAngle: 0,
+                rolloffFactor: 0.9
+            });
+            soundSet.addSound(newSound);
+        }
+
+        return soundSet;
+    }
+
+    /**
+     * Sets the dimensions of the space in which the sfx occur, which affects how much sounds
+     * are panned.
+     *
+     * @param width
+     * @param height
+     */
+    module.setAreaDimensions = function(width, height) {
+        areaWidth = width;
+        areaHeight = height;
+    };
 
     module.setGain = function(value) {
         masterGain.gain.value = value;
@@ -320,24 +379,68 @@ var sfx = (function() {
 
 
     module.generate = function(motionData) {
-        var playSwoosh = false,
-            playPunch = false;
+        var playSwooshHard = {},
+            playSwooshSoft = {},
+            playPunch = {};
 
-        motionData.forEach(function(motion) {
-            if (70 < motion) {
-                playPunch = true;
+        motionData.forEach(function(motionValue, i) {
+            if (60 < motionValue) {
+                playPunch.triggered = true;
+                playPunch.volume = motionValue / 100;
+                playPunch.pan = regionIndexToPanCoordinates(i);
             }
-            if (30 < motion) {
-                playSwoosh = true;
+            if (50 < motionValue) {
+                playSwooshHard.triggered = true;
+                playSwooshHard.volume = motionValue / 100;
+                playSwooshHard.pan = regionIndexToPanCoordinates(i);
             }
-        }); 
+            if (30 < motionValue) {
+                playSwooshSoft.triggered = true;
+                playSwooshHard.volume = motionValue / 100;
+                playSwooshSoft.pan = regionIndexToPanCoordinates(i);
+            }
+        });
 
-        if (playPunch) {
-            sounds.punch.trigger();
-        } else if (playSwoosh) {
-            sounds.swoosh.trigger();
+        if (playPunch.triggered) {
+            sounds.punchHard.trigger(playPunch.volume, playPunch.pan.x, playPunch.pan.y);
+        } else if (playSwooshHard.triggered) {
+            sounds.swooshHard.trigger(playSwooshHard.volume, playSwooshHard.pan.x, playSwooshHard.pan.y);
+        } else if (playSwooshSoft.triggered) {
+            sounds.swooshSoft.trigger(playSwooshSoft.volume, playSwooshSoft.pan.x, playSwooshSoft.pan.y);
         }
     };
+
+    /**
+     * Convert the region index i to a set of {x, y} coordinates relative to the centre of the
+     * sound area.
+     *
+     * @param i
+     * @returns {{x: number, y: number}}
+     */
+    function regionIndexToPanCoordinates(i) {
+        var x, y;
+
+        if (i <= 2) {
+            y = -1;
+        } else if (i <= 5) {
+            y = 0;
+        } else {
+            y = 1;
+        }
+
+        if (i % 3 === 0) {
+            x = -1;
+        } else if ((i - 1) % 3 === 0) {
+            x = 0;
+        } else {
+            x = 1;
+        }
+
+        return {
+            x: x,
+            y: y
+        };
+    }
 
     return module;
 })();
@@ -348,15 +451,27 @@ var sfx = (function() {
  *
  */
 function SoundSet() {
-    var sounds = [];
+    var sounds = [],
+        isPlaying = false;
 
     this.addSound = function(item) {
         sounds.push(item);
     };
 
     this.trigger = function(volume, x, y) {
-        var randomSound = sounds[Math.floor(Math.random()*sounds.length)];
-        randomSound.play();
+        var randomSound;
+
+        if (!isPlaying) {
+            randomSound = sounds[Math.floor(Math.random() * sounds.length)];
+            randomSound.setGain(volume);
+            randomSound.setPosition(0, 0, 0);
+            randomSound.play(null, null, soundEnded);
+            isPlaying = true;
+        }
+    };
+
+    function soundEnded() {
+        isPlaying = false;
     }
 }
 
@@ -400,7 +515,7 @@ function Sound(buffer, context, defaultOutputNode) {
         panner.setVelocity(vx, vy, vz);
     };
 
-    this.play = function(outputNode, loop) {
+    this.play = function(outputNode, loop, onEnded) {
         outputNode = outputNode || defaultOutputNode;
         loop = loop || false;
         source = context.createBufferSource();
@@ -412,6 +527,12 @@ function Sound(buffer, context, defaultOutputNode) {
         source.connect(gain);
         gain.connect(panner);
         panner.connect(outputNode);
+
+        if (onEnded) {
+            //source.addEventListener('ended', onEnded)
+            source.onended = onEnded;
+        }
+
         source.start();
     };
 
@@ -493,18 +614,15 @@ var hgEngine = (function() {
         w,
         h;
 
-    module.init = function(outputElement, width, height) {
+    module.init = function(outputElement, width, height, onPlayCallback) {
         w = width;
         h = height;
         canvasOut = outputElement;
         contextOut = canvasOut.getContext('2d');
-        motionDetector.init({
-            width: w,
-            height: h
-        });
+        motionDetector.init();
         sfx.loadSounds();
         createVideoElement();
-        startCapturing();
+        startCapturing(onPlayCallback);
     };
 
     function createVideoElement() {
@@ -536,7 +654,7 @@ var hgEngine = (function() {
         }, false);
     }
 
-    function startCapturing() {
+    function startCapturing(onPlayCallback) {
 
         navigator.getUserMedia = (navigator.getUserMedia ||
         navigator.webkitGetUserMedia ||
@@ -552,6 +670,9 @@ var hgEngine = (function() {
                     var url = window.URL || window.webkitURL;
                     video.src = url ? url.createObjectURL(stream) : stream;
                     video.play();
+                    if (onPlayCallback) {
+                        onPlayCallback();
+                    }
                 },
                 function(error) {
                     alert('Something went wrong. (error code ' + error.code + ')');

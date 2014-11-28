@@ -1,7 +1,7 @@
 body {
-    background: #fafafa;
+    background: #171818;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    color: #333;
+    color: #d7d7d7;
 }
 
 .browsehappy {
@@ -12,6 +12,46 @@ body {
 }
 
 #output {
-  width: auto;
-  height: 100%;
+  position: absolute;
+  top: 0;
+}
+
+#canvas-blend{
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+}
+
+.splash {
+  position: absolute;
+  top: 100px;
+  margin: auto;
+  z-index: 2;
+
+  &.hidden {
+    visibility: hidden;
+  }
+}
+
+.loader {
+  &.hidden {
+     visibility: hidden;
+   }
+}
+
+.overlay {
+  position: absolute;
+  z-index: 10;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: black;
+  color: darkred;
+  font-size: 24px;
+  text-align: center;
+
+  &.hidden{
+    visibility: hidden;
+  }
 }

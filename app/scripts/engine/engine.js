@@ -13,18 +13,15 @@ var hgEngine = (function() {
         w,
         h;
 
-    module.init = function(outputElement, width, height) {
+    module.init = function(outputElement, width, height, onPlayCallback) {
         w = width;
         h = height;
         canvasOut = outputElement;
         contextOut = canvasOut.getContext('2d');
-        motionDetector.init({
-            width: w,
-            height: h
-        });
+        motionDetector.init();
         sfx.loadSounds();
         createVideoElement();
-        startCapturing();
+        startCapturing(onPlayCallback);
     };
 
     function createVideoElement() {
@@ -56,7 +53,7 @@ var hgEngine = (function() {
         }, false);
     }
 
-    function startCapturing() {
+    function startCapturing(onPlayCallback) {
 
         navigator.getUserMedia = (navigator.getUserMedia ||
         navigator.webkitGetUserMedia ||
@@ -72,6 +69,9 @@ var hgEngine = (function() {
                     var url = window.URL || window.webkitURL;
                     video.src = url ? url.createObjectURL(stream) : stream;
                     video.play();
+                    if (onPlayCallback) {
+                        onPlayCallback();
+                    }
                 },
                 function(error) {
                     alert('Something went wrong. (error code ' + error.code + ')');

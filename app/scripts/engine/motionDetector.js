@@ -20,14 +20,15 @@ var motionDetector = (function() {
     var module = {},
         canvasBlend,
         contextBlend,
+        contextScale,
         lastImageData,
         regions = [],
         w,
         h,
         options,
         defaultOptions = {
-            width: 640,
-            height: 480,
+            width: 320,
+            height: 240,
             horizontalRegions: 3,
             verticalRegions: 3,
             displayDebugCanvas: true,
@@ -43,6 +44,7 @@ var motionDetector = (function() {
         w = options.width;
         h = options.height;
         createBlendCanvas();
+        createScaleCanvas();
         createRegions(options.horizontalRegions, options.verticalRegions);
     };
 
@@ -80,6 +82,18 @@ var motionDetector = (function() {
         if (options.displayDebugCanvas) {
             document.body.appendChild(canvasBlend);
         }
+    }
+
+    /**
+     * This context is used to scale the video feed canvas (contextOut) down to the same size as the
+     * blend canvas, so we can sample the entire image but at a much smaller resolution, allowing for faster
+     * calculation of the motion regions.
+     */
+    function createScaleCanvas() {
+        var c = document.createElement('canvas');
+        c.setAttribute('width', w);
+        c.setAttribute('height', h);
+        contextScale = c.getContext('2d');
     }
 
 
@@ -200,6 +214,7 @@ var motionDetector = (function() {
         lastImageData = sourceData;
 
         return blendedData;
+        //return sourceData;
     }
 
     function differenceAccuracy(target, data1, data2) {
@@ -239,6 +254,11 @@ var motionDetector = (function() {
         return (value > options.sensitivity) ? 255 : 0;
     }
 
+    function scaleContextOut(contextOut) {
+        contextScale.drawImage(contextOut.canvas, 0, 0, w, h);
+        return contextScale;
+    }
+
     /**
      * Given a canvas context, compare the current frame against the frame from the last call to this function, and
      * return an array of the percentage of changed pixels in each region of the canvas.
@@ -251,9 +271,11 @@ var motionDetector = (function() {
      */
     module.analyze = function(contextOut, showDebugData) {
         var motionByRegion,
-            motionData;
+            motionData,
+            scaledContext;
 
-        motionData = doBlend(contextOut);
+        scaledContext = scaleContextOut(contextOut);
+        motionData = doBlend(scaledContext);
         motionByRegion = detectMotionByRegion(motionData.data);
 
         if (showDebugData) {
