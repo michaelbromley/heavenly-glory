@@ -50,8 +50,22 @@ body {
   color: darkred;
   font-size: 24px;
   text-align: center;
+  transition: opacity 0s, background-color 3s;
 
   &.hidden{
     visibility: hidden;
+    opacity: 0;
+    transition: opacity 3s, visibility 0s 3s;
+  }
+
+  &.transparent {
+    background-color: rgba(0, 0, 0, 0);
+  }
+  .title {
+    transition: opacity 1s;
+
+    &.hidden {
+      opacity: 0;
+    }
   }
 }
