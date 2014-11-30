@@ -3,13 +3,19 @@
  */
 
 
-$('.start').on('click', function() {
+$('.start').on('click', function(e) {
+    e.preventDefault();
 
-    $('.splash').addClass('hidden');
-    $('.loader').removeClass('hidden');
+    $('.splash').hide();
+    $('.loader').show();
+    setTimeout(function() {
+        $('.loader').removeClass('hidden');
+    }, 100);
     setTitles();
     initSequencer();
-    startMovie(onMovieStarted);
+    setTimeout(function() {
+        startMovie(onMovieStarted);
+    }, 1);
 });
 
 function onMovieStarted() {
@@ -17,10 +23,10 @@ function onMovieStarted() {
 }
 
 function setTitles() {
-    var actorName = $('input[name="actor-name"]').val();
-    var movieName = $('input[name="movie-name"]').val();
-    $('.title-movie').html(movieName);
-    $('.title-actor').html('Starring ' + actorName);
+    var actorName = $('.actor-name').html();
+    var movieName = $('.movie-name').html();
+    $('.movie-name-title').html(movieName);
+    $('.actor-name-title').html(actorName);
 }
 
 
@@ -34,32 +40,31 @@ function startMovie(onPlayCallback) {
 
 function initSequencer() {
     sequencer.registerEvent(0, function() {
-        $('.loader').addClass('hidden');
+        $('.loader').hide();
+        $('body').addClass('theater');
+        $('.output-container').show();
         $('.overlay').removeClass('hidden');
-        console.log('event 1');
     });
-    sequencer.registerEvent(3000, function() {
+    sequencer.registerEvent(1500, function() {
         $('.title-hg').removeClass('hidden');
-        console.log('event 2');
+    });
+    sequencer.registerEvent(4000, function() {
+        $('.title-hg').addClass('hidden');
     });
     sequencer.registerEvent(6000, function() {
-        $('.title-hg').addClass('hidden');
         $('.title-movie').removeClass('hidden');
-        console.log('event 3');
     });
     sequencer.registerEvent(9000, function() {
         $('.title-movie').addClass('hidden');
+    });
+    sequencer.registerEvent(11000, function() {
         $('.title-actor').removeClass('hidden');
-        console.log('event 4');
     });
     sequencer.registerEvent(12000, function() {
-        $('.title-actor').addClass('hidden');
         $('.overlay').addClass('transparent');
-        console.log('event 5');
     });
-    sequencer.registerEvent(20000, function() {
+    sequencer.registerEvent(30000, function() {
         $('.overlay').addClass('hidden');
-        console.log('event 5');
     });
 }
 

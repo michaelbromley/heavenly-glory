@@ -20,6 +20,7 @@ var hgEngine = (function() {
         contextOut = canvasOut.getContext('2d');
         motionDetector.init();
         sfx.loadSounds();
+        music.load();
         createVideoElement();
         startCapturing(onPlayCallback);
     };
@@ -69,6 +70,7 @@ var hgEngine = (function() {
                     var url = window.URL || window.webkitURL;
                     video.src = url ? url.createObjectURL(stream) : stream;
                     video.play();
+                    music.play();
                     if (onPlayCallback) {
                         onPlayCallback();
                     }

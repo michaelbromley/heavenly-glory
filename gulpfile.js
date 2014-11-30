@@ -20,6 +20,8 @@ gulp.task('styles', function () {
 gulp.task('engine', function() {
     return gulp.src([
         'app/scripts/engine/motionDetector.js',
+        'app/scripts/engine/audioUtils.js',
+        'app/scripts/engine/music.js',
         'app/scripts/engine/sfx.js',
         'app/scripts/engine/engine.js'
     ])

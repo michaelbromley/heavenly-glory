@@ -1,19 +1,51 @@
+$title-font: 'Carter One', cursive;
+$poster-font: 'Six Caps', sans-serif;
+
 body {
-    background: #171818;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    color: #d7d7d7;
+  background-color: #c7c7c7;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #333;
+  transition: background-color 1s;
+
+  &.theater {
+    background-color: #000000;
+  }
 }
 
 .browsehappy {
-    margin: 0.2em 0;
-    background: #ccc;
-    color: #000;
-    padding: 0.2em 0;
+  margin: 0.2em 0;
+  background: #ccc;
+  color: #000;
+  padding: 0.2em 0;
 }
 
-#output {
-  position: absolute;
-  top: 0;
+.output-container {
+  width: 100%;
+  text-align: center;
+  display: none;
+  position: relative;
+
+  canvas#output {
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+  }
+
+  .letterbox {
+    position: absolute;
+    left: 0;
+    width: 100vw;
+    height: 10vh;
+    background-color: #000000;
+    &.top {
+      top: 0;
+    }
+    &.bottom {
+      bottom: 0;
+    }
+  }
 }
 
 #canvas-blend{
@@ -23,20 +55,113 @@ body {
 }
 
 .splash {
-  position: absolute;
-  top: 100px;
+  text-transform: uppercase;
+  text-align: center;
+  top: 0;
+  left: 0;
+  width: 100%;
   margin: auto;
   z-index: 2;
 
   &.hidden {
     visibility: hidden;
   }
+
+  span[contenteditable] {
+    //border-bottom: 1px dotted #555;
+  }
+
+  .poster {
+
+  }
+
+  .poster-text {
+    max-width: 800px;
+    margin: 0 auto 0 auto;
+    color: rgb(148, 0, 0);
+
+    font-family: $title-font;
+    font-size: 64px;
+    line-height: 0.9em;
+
+    .movie-name, .actor-name {
+      text-shadow: 0px 4px 1px rgb(45, 45, 45);
+    }
+
+    &.top {
+      .detail {
+        color: #555;
+      }
+    }
+
+    &.bottom {
+      margin-top: -300px;
+      margin-bottom: 42px;
+    }
+
+    .detail {
+      font-family: $poster-font;
+      font-size: 48px;
+      color: white;
+    }
+  }
+
+  a.start {
+
+    margin: 20px 0 50px 0;
+    font-family: $title-font;
+    text-transform: uppercase;
+    font-size: 32px;
+    border: 1px solid darkred;
+    border-radius: 10px;
+    padding: 10px;
+    display: inline-block;
+    transition: all 0.3s;
+
+    &:link, &:visited {
+      color: white;
+      background-color: darkred;
+      text-decoration: none;
+    }
+
+    &:hover {
+      color: darkred;
+      background-color: white;
+    }
+  }
 }
 
 .loader {
   &.hidden {
-     visibility: hidden;
-   }
+    display: none;
+    .volume, .moves, .press {
+      opacity: 0;
+    }
+  }
+
+  padding-top: 50px;
+  text-align: center;
+  margin-bottom: 100px;
+
+  .instructions {
+    display: inline-block;
+    max-width: 300px;
+    text-align: center;
+    font-family: $title-font;
+    text-transform: uppercase;
+    color: #60080b;
+    font-size: 32px;
+
+    &.volume {
+      transition: opacity 0.5s;
+    }
+    &.moves {
+      transition: opacity 0.5s 1.5s;
+    }
+    &.press {
+      transition: opacity 0.5s 3s;
+    }
+  }
 }
 
 .overlay {
@@ -62,10 +187,53 @@ body {
     background-color: rgba(0, 0, 0, 0);
   }
   .title {
+    position: absolute;
+    text-align: center;
+    width: 100%;
     transition: opacity 1s;
+    font-family: $title-font;
+    text-transform: uppercase;
+    color: darkred;
+    z-index: 50;
+    line-height: 0.85em;
+
+    &.title-hg {
+      font-family: $poster-font;
+      font-size: 64px;
+      top: 30vh;
+    }
+
+    &.title-movie {
+      top: 30vh;
+      font-size: 64px;
+    }
+
+    &.title-actor {
+      small {
+        font-family: $poster-font;
+        color: #999;
+      }
+      top: 70vh;
+      font-size: 50px;
+    }
 
     &.hidden {
       opacity: 0;
     }
+  }
+}
+
+.credits {
+  text-align: center;
+  font-family: $poster-font;
+  font-size: 40px;
+  color: #333;
+  line-height: 0.9em;
+  a:link, a:visited {
+    text-decoration: none;
+    color: #4b4b9a;
+  }
+  a:hover, a:active {
+    color: #566be3;
   }
 }

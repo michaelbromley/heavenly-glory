@@ -5,6 +5,7 @@
         <title>heavenly glory</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href='http://fonts.googleapis.com/css?family=Carter+One|Six+Caps' rel='stylesheet' type='text/css'>
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
         <!-- build:css styles/vendor.css -->
@@ -25,34 +26,55 @@
 
 
         <div class="splash">
-            <label>
-                Your name:
-                <input type="text" name="actor-name">
-            </label><br>
-            <label>
-                Movie name:
-                <input type="text" name="movie-name">
-            </label>
-            <button class="start">Start!</button>
+            <div class="poster-text top">
+                <div class="detail">Heavenly Glory Productions <small>presents</small></div>
+                <span contenteditable="true" class="movie-name">Enter The Webcam</span>
+            </div>
+            <img src="assets/images/poster.jpg" class="poster">
+            <div class="poster-text bottom">
+                <div class="detail"><small>starring</small></div>
+                <span contenteditable="true" class="actor-name">Your Name</span>
+            </div>
+            <a href="#" class="start">Start!</a>
         </div>
 
         <div class="loader hidden">
-            <h2>Loading...</h2>
-            <h3>Press okay above!</h3>
+            <div class="instructions volume">
+                <img src="assets/images/instructions-1.png">
+                <div class="text">Turn up the volume...</div>
+            </div>
+            <div class="instructions moves">
+                <img src="assets/images/instructions-2.png">
+                <div class="text">Get your best moves ready...</div>
+            </div>
+            <div class="instructions press">
+                <img src="assets/images/instructions-3.png">
+                <div class="text">And enable your webcam!</div>
+            </div>
         </div>
 
-        <canvas id="output"></canvas>
+        <div class="output-container">
+            <div class="letterbox top"></div>
+            <canvas id="output"></canvas>
+            <div class="letterbox bottom"></div>
+        </div>
 
         <div class="overlay hidden">
-            <div class="title-hg">
+            <div class="title title-hg hidden">
                 Heavenly Glory Productions Presents
             </div>
-            <div class="title-movie">
-
+            <div class="title title-movie hidden">
+                <span class="movie-name-title"></span>
             </div>
-            <div class="title-actor">
-
+            <div class="title title-actor hidden">
+                <small>Starring</small><div class="actor-name-title"></div>
             </div>
+        </div>
+
+        <div class="credits">
+            <small>An experiment in</small> Web RTC <small>and</small> Web Audio <small>by</small> Michael Bromley<br>
+            <small>Based on a motion detection concept by </small> <a href="http://www.adobe.com/devnet/archive/html5/articles/javascript-motion-detection.html">Soundstep</a>
+            <small>and an implementation by</small> <a href="https://github.com/ReallyGood/js-motion-detection">Really Good</a><br>
         </div>
 
 
@@ -75,6 +97,7 @@
         <!-- build:js scripts/main.js -->
 
         <script src="scripts/engine.js"></script>
+        <script src="scripts/sequencer.js"></script>
         <script src="scripts/main.js"></script>
         <!-- endbuild -->
 </body>

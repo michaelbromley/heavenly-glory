@@ -3,6 +3,7 @@
 node_modules
 app/bower_components
 .idea
+assets_source
 
 # Windows image file caches
 Thumbs.db
@@ -48,3 +49,4 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
+assets_source/Enter The Dragon - OST - 01 - Enter The Dragon (Main Theme).mp3
