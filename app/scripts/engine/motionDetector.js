@@ -23,6 +23,7 @@ var motionDetector = (function() {
         contextScale,
         lastImageData,
         regions = [],
+        maxPixelCount = [],
         w,
         h,
         options,
@@ -130,7 +131,10 @@ var motionDetector = (function() {
 
         for (r = regions.length - 1; 0 <= r; r-- ) {
             region = regions[r];
-            pixelCount = motionByRegion[r];
+            if (!maxPixelCount[r] || maxPixelCount[r] < motionByRegion[r]) {
+                maxPixelCount[r] = motionByRegion[r];
+            }
+            pixelCount = maxPixelCount[r];
             alpha = pixelCount / 100;
 
             contextBlend.beginPath();
@@ -138,6 +142,10 @@ var motionDetector = (function() {
             contextBlend.fillStyle = 'rgba(255, 100, 100, ' + alpha + ')';
             contextBlend.fill();
             contextBlend.stroke();
+
+            if (5 < maxPixelCount[r]) {
+                maxPixelCount[r] -= 2;
+            }
         }
     }
 
@@ -279,8 +287,11 @@ var motionDetector = (function() {
         motionByRegion = detectMotionByRegion(motionData.data);
 
         if (showDebugData) {
+            contextBlend.canvas.style.display = 'block';
             contextBlend.putImageData(motionData, 0, 0);
             drawRegions(motionByRegion);
+        } else {
+            contextBlend.canvas.style.display = 'none';
         }
 
         return motionByRegion;

@@ -15,7 +15,15 @@ $('.start').on('click', function(e) {
     initSequencer();
     setTimeout(function() {
         startMovie(onMovieStarted);
-    }, 1);
+    }, 3500);
+});
+
+$('.settings-icon').on('click', function() {
+    $('.settings-panel').toggleClass('hidden');
+});
+
+$('.display-debug').on('change', function() {
+    hgEngine.showDebugCanvas($(this).is(':checked'));
 });
 
 function onMovieStarted() {
@@ -65,6 +73,7 @@ function initSequencer() {
     });
     sequencer.registerEvent(30000, function() {
         $('.overlay').addClass('hidden');
+        hgEngine.fadeOutMusic();
     });
 }
 

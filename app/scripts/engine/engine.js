@@ -11,7 +11,8 @@ var hgEngine = (function() {
         canvasOut,
         contextOut,
         w,
-        h;
+        h,
+        showDebugCanvas = false;
 
     module.init = function(outputElement, width, height, onPlayCallback) {
         w = width;
@@ -20,9 +21,21 @@ var hgEngine = (function() {
         contextOut = canvasOut.getContext('2d');
         motionDetector.init();
         sfx.loadSounds();
-        music.load();
+        music.load(0.6);
         createVideoElement();
         startCapturing(onPlayCallback);
+    };
+
+    module.fadeOutMusic = function() {
+        music.fadeOut();
+    };
+
+    module.showDebugCanvas = function(val) {
+        if (typeof val !== 'undefined') {
+            showDebugCanvas = !!val;
+        } else {
+            return showDebugCanvas;
+        }
     };
 
     function createVideoElement() {
@@ -95,7 +108,7 @@ var hgEngine = (function() {
         var motionData;
 
         drawVideo();
-        motionData = motionDetector.analyze(contextOut, true);
+        motionData = motionDetector.analyze(contextOut, showDebugCanvas);
         sfx.generate(motionData);
         requestAnimationFrame(update);
     }

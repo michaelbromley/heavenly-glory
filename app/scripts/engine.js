@@ -27,6 +27,7 @@ var motionDetector = (function() {
         contextScale,
         lastImageData,
         regions = [],
+        maxPixelCount = [],
         w,
         h,
         options,
@@ -134,7 +135,10 @@ var motionDetector = (function() {
 
         for (r = regions.length - 1; 0 <= r; r-- ) {
             region = regions[r];
-            pixelCount = motionByRegion[r];
+            if (!maxPixelCount[r] || maxPixelCount[r] < motionByRegion[r]) {
+                maxPixelCount[r] = motionByRegion[r];
+            }
+            pixelCount = maxPixelCount[r];
             alpha = pixelCount / 100;
 
             contextBlend.beginPath();
@@ -142,6 +146,10 @@ var motionDetector = (function() {
             contextBlend.fillStyle = 'rgba(255, 100, 100, ' + alpha + ')';
             contextBlend.fill();
             contextBlend.stroke();
+
+            if (5 < maxPixelCount[r]) {
+                maxPixelCount[r] -= 2;
+            }
         }
     }
 
@@ -283,8 +291,11 @@ var motionDetector = (function() {
         motionByRegion = detectMotionByRegion(motionData.data);
 
         if (showDebugData) {
+            contextBlend.canvas.style.display = 'block';
             contextBlend.putImageData(motionData, 0, 0);
             drawRegions(motionByRegion);
+        } else {
+            contextBlend.canvas.style.display = 'none';
         }
 
         return motionByRegion;
@@ -426,25 +437,27 @@ var music = (function() {
     var module = {},
         masterGain,
         context,
-        musicLoop;
+        musicLoop,
+        gain = 1;
 
     window.AudioContext = window.AudioContext || window.webkitAudioContext;
     context = new AudioContext();
     masterGain = context.createGain();
     masterGain.connect(context.destination);
 
-    module.load = function() {
-            var bufferLoader = new BufferLoader(
-                context,
-                ['assets/audio/music-loop-01.mp3'],
-                finishedLoading
-            );
-
-            bufferLoader.load();
-        };
+    module.load = function(initialVolume) {
+        var bufferLoader = new BufferLoader(
+            context,
+            ['assets/audio/music-loop-01.mp3'],
+            finishedLoading
+        );
+        gain = initialVolume;
+        bufferLoader.load();
+    };
 
     function finishedLoading(bufferList) {
         musicLoop = new Sound(bufferList[0], context, masterGain);
+        musicLoop.setGain(gain);
     }
 
     module.play = function() {
@@ -452,6 +465,28 @@ var music = (function() {
             musicLoop.play(null, true);
         }
     };
+
+    module.setVolume = function(val) {
+        if (0 <= val && val <= 1) {
+            gain = val;
+            musicLoop.setGain(gain);
+        }
+    };
+
+    module.fadeOut = function() {
+        fadeOut();
+    };
+
+    function fadeOut() {
+        var decrement = 0.05;
+        if (decrement <= gain) {
+            gain -= decrement;
+            module.setVolume(gain);
+            setTimeout(fadeOut, 700);
+        } else {
+            musicLoop.stop();
+        }
+    }
 
     return module;
 
@@ -645,7 +680,8 @@ var hgEngine = (function() {
         canvasOut,
         contextOut,
         w,
-        h;
+        h,
+        showDebugCanvas = false;
 
     module.init = function(outputElement, width, height, onPlayCallback) {
         w = width;
@@ -654,9 +690,21 @@ var hgEngine = (function() {
         contextOut = canvasOut.getContext('2d');
         motionDetector.init();
         sfx.loadSounds();
-        music.load();
+        music.load(0.6);
         createVideoElement();
         startCapturing(onPlayCallback);
+    };
+
+    module.fadeOutMusic = function() {
+        music.fadeOut();
+    };
+
+    module.showDebugCanvas = function(val) {
+        if (typeof val !== 'undefined') {
+            showDebugCanvas = !!val;
+        } else {
+            return showDebugCanvas;
+        }
     };
 
     function createVideoElement() {
@@ -729,7 +777,7 @@ var hgEngine = (function() {
         var motionData;
 
         drawVideo();
-        motionData = motionDetector.analyze(contextOut, true);
+        motionData = motionDetector.analyze(contextOut, showDebugCanvas);
         sfx.generate(motionData);
         requestAnimationFrame(update);
     }

@@ -1,8 +1,10 @@
+@import "icons";
+
 $title-font: 'Carter One', cursive;
 $poster-font: 'Six Caps', sans-serif;
 
 body {
-  background-color: #c7c7c7;
+  background-color: #eee;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: #333;
   transition: background-color 1s;
@@ -36,7 +38,7 @@ body {
   .letterbox {
     position: absolute;
     left: 0;
-    width: 100vw;
+    width: 100%;
     height: 10vh;
     background-color: #000000;
     &.top {
@@ -44,6 +46,36 @@ body {
     }
     &.bottom {
       bottom: 0;
+    }
+  }
+}
+
+.settings {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  text-align: left;
+  padding: 10px;
+  z-index: 100;
+  .settings-icon {
+    font-size: 32px;
+    color: #999;
+    cursor: pointer;
+    &:hover {
+      color: #bbb;
+    }
+  }
+  .settings-panel {
+    position: absolute;
+    bottom: 50px;
+    left: 10px;
+    border: 1px solid red;
+    background-color: #333;
+    color: #ddd;
+    width: 300px;
+    padding: 20px;
+    &.hidden {
+      display: none;
     }
   }
 }
