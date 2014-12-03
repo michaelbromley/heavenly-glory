@@ -14,6 +14,23 @@ var hgEngine = (function() {
         h,
         showDebugCanvas = false;
 
+    /**
+     * Check to see if the browser supports the two key technologies required for the engine to run:
+     * Web Audio and GetUserMedia.
+     */
+    module.browserSupportCheck = function() {
+        if (!window.AudioContext && !window.webkitAudioContext) {
+            return false;
+        }
+        if (!(navigator.getUserMedia ||
+                navigator.webkitGetUserMedia ||
+                navigator.mozGetUserMedia ||
+                navigator.msGetUserMedia)) {
+            return false;
+        }
+        return true;
+    };
+
     module.init = function(outputElement, width, height, onPlayCallback) {
         w = width;
         h = height;
@@ -93,8 +110,7 @@ var hgEngine = (function() {
                     return;
                 }
             );
-        }
-        else {
+        } else {
             alert('Sorry, the browser you are using doesn\'t support getUserMedia');
             return;
         }
@@ -113,9 +129,25 @@ var hgEngine = (function() {
         requestAnimationFrame(update);
     }
 
-    function drawVideo() {
+    /*function drawVideo() {
         contextOut.drawImage(video, 0, 0, video.width, video.height);
+    }*/
+
+    function drawVideo() {
+        try {
+            contextOut.drawImage(video, 0, 0, video.width, video.height);
+        } catch (e) {
+            if (e.name == "NS_ERROR_NOT_AVAILABLE") {
+                // Wait a bit before trying again; you may wish to change the
+                // length of this delay.
+                console.log('video exception caught' + Date.now().toString());
+                setTimeout(drawVideo, 10);
+            } else {
+                throw e;
+            }
+        }
     }
+
 
     return module;
 

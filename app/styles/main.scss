@@ -11,6 +11,7 @@ body {
 
   &.theater {
     background-color: #000000;
+    overflow: hidden;
   }
 }
 
@@ -19,6 +20,20 @@ body {
   background: #ccc;
   color: #000;
   padding: 0.2em 0;
+}
+
+.no-support-warning {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: #ddd;
+  text-align: center;
+  font-size: 2em;
+  &.hidden {
+    display: none;
+  }
 }
 
 .output-container {
@@ -59,17 +74,18 @@ body {
   z-index: 100;
   .settings-icon {
     font-size: 32px;
-    color: #999;
+    color: #666;
     cursor: pointer;
     &:hover {
-      color: #bbb;
+      color: #aaa;
     }
   }
   .settings-panel {
     position: absolute;
     bottom: 50px;
     left: 10px;
-    border: 1px solid red;
+    border: 1px solid #666;
+    border-radius: 10px;
     background-color: #333;
     color: #ddd;
     width: 300px;

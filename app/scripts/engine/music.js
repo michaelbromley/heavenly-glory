@@ -11,9 +11,11 @@ var music = (function() {
         gain = 1;
 
     window.AudioContext = window.AudioContext || window.webkitAudioContext;
-    context = new AudioContext();
-    masterGain = context.createGain();
-    masterGain.connect(context.destination);
+    if (window.AudioContext) {
+        context = new AudioContext();
+        masterGain = context.createGain();
+        masterGain.connect(context.destination);
+    }
 
     module.load = function(initialVolume) {
         var bufferLoader = new BufferLoader(

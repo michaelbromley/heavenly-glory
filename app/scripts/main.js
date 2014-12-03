@@ -2,20 +2,23 @@
  * Created by Michael on 21/11/2014.
  */
 
-
 $('.start').on('click', function(e) {
     e.preventDefault();
 
-    $('.splash').hide();
-    $('.loader').show();
-    setTimeout(function() {
-        $('.loader').removeClass('hidden');
-    }, 100);
-    setTitles();
-    initSequencer();
-    setTimeout(function() {
-        startMovie(onMovieStarted);
-    }, 3500);
+    if (hgEngine.browserSupportCheck()) {
+        $('.splash').hide();
+        $('.loader').show();
+        setTimeout(function () {
+            $('.loader').removeClass('hidden');
+        }, 100);
+        setTitles();
+        initSequencer();
+        setTimeout(function () {
+            startMovie(onMovieStarted);
+        }, 3500);
+    } else {
+        $('.no-support-warning').removeClass('hidden');
+    }
 });
 
 $('.settings-icon').on('click', function() {

@@ -320,32 +320,18 @@ var motionDetector = (function() {
 function Sound(buffer, context, defaultOutputNode) {
     var source,
         defaultOutputNode = defaultOutputNode || context.destination,
-        panner = context.createPanner(),
         gain = context.createGain(),
         playbackRate = 1;
 
-    this.setPannerParameters = function(options) {
-        for(var option in options) {
-            if (options.hasOwnProperty(option)) {
-                panner[option] = options[option];
-            }
-        }
-    };
 
     this.setPlaybackRate = function(value) {
         playbackRate = value;
     };
 
     this.setGain = function(value) {
-        gain.gain.value = value;
-    };
-
-    this.setPosition = function(x, y, z) {
-        panner.setPosition(x, y, z);
-    };
-
-    this.setVelocity = function(vx, vy, vz) {
-        panner.setVelocity(vx, vy, vz);
+        if (0 <= value && value <= 1) {
+            gain.gain.value = value;
+        }
     };
 
     this.play = function(outputNode, loop, onEnded) {
@@ -358,8 +344,7 @@ function Sound(buffer, context, defaultOutputNode) {
             source.loop = true;
         }
         source.connect(gain);
-        gain.connect(panner);
-        panner.connect(outputNode);
+        gain.connect(outputNode);
 
         if (onEnded) {
             source.onended = onEnded;
@@ -441,9 +426,11 @@ var music = (function() {
         gain = 1;
 
     window.AudioContext = window.AudioContext || window.webkitAudioContext;
-    context = new AudioContext();
-    masterGain = context.createGain();
-    masterGain.connect(context.destination);
+    if (window.AudioContext) {
+        context = new AudioContext();
+        masterGain = context.createGain();
+        masterGain.connect(context.destination);
+    }
 
     module.load = function(initialVolume) {
         var bufferLoader = new BufferLoader(
@@ -502,9 +489,11 @@ var sfx = (function() {
 
     // Fix up prefixing
     window.AudioContext = window.AudioContext || window.webkitAudioContext;
-    context = new AudioContext();
-    masterGain = context.createGain();
-    masterGain.connect(context.destination);
+    if (window.AudioContext) {
+        context = new AudioContext();
+        masterGain = context.createGain();
+        masterGain.connect(context.destination);
+    }
 
     module.loadSounds = function() {
         var bufferLoader = new BufferLoader(
@@ -588,7 +577,7 @@ var sfx = (function() {
             }
             if (30 < motionValue) {
                 playSwooshSoft.triggered = true;
-                playSwooshHard.volume = motionValue / 100;
+                playSwooshSoft.volume = motionValue / 100;
                 playSwooshSoft.pan = regionIndexToPanCoordinates(i);
             }
         });
@@ -683,6 +672,23 @@ var hgEngine = (function() {
         h,
         showDebugCanvas = false;
 
+    /**
+     * Check to see if the browser supports the two key technologies required for the engine to run:
+     * Web Audio and GetUserMedia.
+     */
+    module.browserSupportCheck = function() {
+        if (!window.AudioContext && !window.webkitAudioContext) {
+            return false;
+        }
+        if (!(navigator.getUserMedia ||
+                navigator.webkitGetUserMedia ||
+                navigator.mozGetUserMedia ||
+                navigator.msGetUserMedia)) {
+            return false;
+        }
+        return true;
+    };
+
     module.init = function(outputElement, width, height, onPlayCallback) {
         w = width;
         h = height;
@@ -762,8 +768,7 @@ var hgEngine = (function() {
                     return;
                 }
             );
-        }
-        else {
+        } else {
             alert('Sorry, the browser you are using doesn\'t support getUserMedia');
             return;
         }
@@ -782,9 +787,25 @@ var hgEngine = (function() {
         requestAnimationFrame(update);
     }
 
-    function drawVideo() {
+    /*function drawVideo() {
         contextOut.drawImage(video, 0, 0, video.width, video.height);
+    }*/
+
+    function drawVideo() {
+        try {
+            contextOut.drawImage(video, 0, 0, video.width, video.height);
+        } catch (e) {
+            if (e.name == "NS_ERROR_NOT_AVAILABLE") {
+                // Wait a bit before trying again; you may wish to change the
+                // length of this delay.
+                console.log('video exception caught' + Date.now().toString());
+                setTimeout(drawVideo, 10);
+            } else {
+                throw e;
+            }
+        }
     }
+
 
     return module;
 

@@ -9,9 +9,11 @@ var sfx = (function() {
 
     // Fix up prefixing
     window.AudioContext = window.AudioContext || window.webkitAudioContext;
-    context = new AudioContext();
-    masterGain = context.createGain();
-    masterGain.connect(context.destination);
+    if (window.AudioContext) {
+        context = new AudioContext();
+        masterGain = context.createGain();
+        masterGain.connect(context.destination);
+    }
 
     module.loadSounds = function() {
         var bufferLoader = new BufferLoader(
@@ -95,7 +97,7 @@ var sfx = (function() {
             }
             if (30 < motionValue) {
                 playSwooshSoft.triggered = true;
-                playSwooshHard.volume = motionValue / 100;
+                playSwooshSoft.volume = motionValue / 100;
                 playSwooshSoft.pan = regionIndexToPanCoordinates(i);
             }
         });

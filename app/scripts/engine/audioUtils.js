@@ -14,32 +14,18 @@
 function Sound(buffer, context, defaultOutputNode) {
     var source,
         defaultOutputNode = defaultOutputNode || context.destination,
-        panner = context.createPanner(),
         gain = context.createGain(),
         playbackRate = 1;
 
-    this.setPannerParameters = function(options) {
-        for(var option in options) {
-            if (options.hasOwnProperty(option)) {
-                panner[option] = options[option];
-            }
-        }
-    };
 
     this.setPlaybackRate = function(value) {
         playbackRate = value;
     };
 
     this.setGain = function(value) {
-        gain.gain.value = value;
-    };
-
-    this.setPosition = function(x, y, z) {
-        panner.setPosition(x, y, z);
-    };
-
-    this.setVelocity = function(vx, vy, vz) {
-        panner.setVelocity(vx, vy, vz);
+        if (0 <= value && value <= 1) {
+            gain.gain.value = value;
+        }
     };
 
     this.play = function(outputNode, loop, onEnded) {
@@ -52,8 +38,7 @@ function Sound(buffer, context, defaultOutputNode) {
             source.loop = true;
         }
         source.connect(gain);
-        gain.connect(panner);
-        panner.connect(outputNode);
+        gain.connect(outputNode);
 
         if (onEnded) {
             source.onended = onEnded;
