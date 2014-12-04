@@ -2,6 +2,8 @@
  * Created by Michael on 21/11/2014.
  */
 
+readTitles();
+
 $('.start').on('click', function(e) {
     e.preventDefault();
 
@@ -17,6 +19,7 @@ $('.start').on('click', function(e) {
             startMovie(onMovieStarted);
         }, 3500);
     } else {
+        $('.splash').hide();
         $('.no-support-warning').removeClass('hidden');
     }
 });
@@ -33,13 +36,53 @@ function onMovieStarted() {
     sequencer.start();
 }
 
-function setTitles() {
-    var actorName = $('.actor-name').html();
-    var movieName = $('.movie-name').html();
-    $('.movie-name-title').html(movieName);
-    $('.actor-name-title').html(actorName);
+function readTitles() {
+    var titles = decodeTitlesFromHash(),
+        movieName = titles[0] || 'Enter The Webcam',
+        actorName = titles[1] || 'Your Name';
+
+    $('.movie-name').html(titles[0]);
+    $('.actor-name').html(titles[1]);
 }
 
+function setTitles() {
+    var movieName = $('.movie-name').html(),
+        actorName = $('.actor-name').html();
+
+    $('.movie-name-title').html(movieName);
+    $('.actor-name-title').html(actorName);
+
+    encodeTitlesToHash(movieName, actorName);
+}
+
+/**
+ * Base-64 encodes the movie name and actor name and pushes it to the URL hash, so that they can be shared via URL.
+ * @param m
+ * @param a
+ */
+function encodeTitlesToHash(m, a) {
+    var mEncoded = utf8_to_b64(m),
+        aEncoded = utf8_to_b64(a);
+    window.location.hash = mEncoded + '|' + aEncoded;
+}
+
+function decodeTitlesFromHash() {
+    var hashParts,
+        mDecoded,
+        aDecoded;
+
+    hashParts = window.location.hash.split('|');
+    if (hashParts.length === 2) {
+        try {
+            mDecoded = b64_to_utf8(hashParts[0].substr(1));
+            aDecoded = b64_to_utf8(hashParts[1])
+        } catch (ex) {
+            console.log('Could not decode url: ' + ex.message);
+        }
+    }
+
+    return [mDecoded, aDecoded];
+}
 
 function startMovie(onPlayCallback) {
     var outputCanvas = document.querySelector('#output');
@@ -80,6 +123,19 @@ function initSequencer() {
     });
 }
 
+/**
+ * UTF-8-safe base64 encoding/decoding as given on MDN
+ * https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64.btoa#Unicode_Strings
+ * @param str
+ * @returns {string}
+ */
+function utf8_to_b64(str) {
+    return window.btoa(encodeURIComponent(escape(str)));
+}
+
+function b64_to_utf8(str) {
+    return unescape(decodeURIComponent(window.atob(str)));
+}
 
 
 // http://paulirish.com/2011/requestanimationframe-for-smart-animating/

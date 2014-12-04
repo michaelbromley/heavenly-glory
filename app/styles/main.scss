@@ -29,6 +29,7 @@ body {
   bottom: 0;
   right: 0;
   background-color: #ddd;
+  font-family: $title-font;
   text-align: center;
   font-size: 2em;
   &.hidden {
