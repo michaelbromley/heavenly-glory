@@ -23,6 +23,9 @@
 	-moz-osx-font-smoothing: grayscale;
 }
 
+.icon-edit:before {
+	content: "\f044";
+}
 .icon-cogs:before {
 	content: "\f085";
 }
