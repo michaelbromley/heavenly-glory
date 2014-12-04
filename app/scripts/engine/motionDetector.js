@@ -49,6 +49,46 @@ var motionDetector = (function() {
         createRegions(options.horizontalRegions, options.verticalRegions);
     };
 
+    module.setSensitivity = function(val) {
+        if (0 <= val && val <= 100) {
+            if (typeof options === 'undefined') {
+                defaultOptions.sensitivity = val;
+            } else {
+                options.sensitivity = val;
+            }
+        }
+    };
+
+    /**
+     * Given a canvas context, compare the current frame against the frame from the last call to this function, and
+     * return an array of the percentage of changed pixels in each region of the canvas.
+     *
+     * The second argument, if true, outputs the data to the blend canvas for debug purposes.
+     *
+     * @param contextOut
+     * @param showDebugData
+     * @returns {Array}
+     */
+    module.analyze = function(contextOut, showDebugData) {
+        var motionByRegion,
+            motionData,
+            scaledContext;
+
+        scaledContext = scaleContextOut(contextOut);
+        motionData = doBlend(scaledContext);
+        motionByRegion = detectMotionByRegion(motionData.data);
+
+        if (showDebugData) {
+            contextBlend.canvas.style.display = 'block';
+            contextBlend.putImageData(motionData, 0, 0);
+            drawRegions(motionByRegion);
+        } else {
+            contextBlend.canvas.style.display = 'none';
+        }
+
+        return motionByRegion;
+    };
+
     /**
      * Merge any user options with the defaultOptions and return the resulting object.
      *
@@ -266,36 +306,6 @@ var motionDetector = (function() {
         contextScale.drawImage(contextOut.canvas, 0, 0, w, h);
         return contextScale;
     }
-
-    /**
-     * Given a canvas context, compare the current frame against the frame from the last call to this function, and
-     * return an array of the percentage of changed pixels in each region of the canvas.
-     *
-     * The second argument, if true, outputs the data to the blend canvas for debug purposes.
-     *
-     * @param contextOut
-     * @param showDebugData
-     * @returns {Array}
-     */
-    module.analyze = function(contextOut, showDebugData) {
-        var motionByRegion,
-            motionData,
-            scaledContext;
-
-        scaledContext = scaleContextOut(contextOut);
-        motionData = doBlend(scaledContext);
-        motionByRegion = detectMotionByRegion(motionData.data);
-
-        if (showDebugData) {
-            contextBlend.canvas.style.display = 'block';
-            contextBlend.putImageData(motionData, 0, 0);
-            drawRegions(motionByRegion);
-        } else {
-            contextBlend.canvas.style.display = 'none';
-        }
-
-        return motionByRegion;
-    };
 
     return module;
 

@@ -55,6 +55,11 @@ var hgEngine = (function() {
         }
     };
 
+    module.setSensitivity = function(val) {
+        var inverseVal = 100 - val;
+        motionDetector.setSensitivity(inverseVal);
+    };
+
     function createVideoElement() {
         var videoElement = document.createElement('video');
         videoElement.setAttribute('id', 'video');

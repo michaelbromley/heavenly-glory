@@ -32,6 +32,12 @@ $('.display-debug').on('change', function() {
     hgEngine.showDebugCanvas($(this).is(':checked'));
 });
 
+$('.sensitivity-slider').on('change', function() {
+    var val = $(this).val();
+    $('.sensitivity-label').html(val);
+    hgEngine.setSensitivity(val);
+});
+
 function onMovieStarted() {
     sequencer.start();
 }
