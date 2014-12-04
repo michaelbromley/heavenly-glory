@@ -435,7 +435,7 @@ var music = (function() {
     module.load = function(initialVolume) {
         var bufferLoader = new BufferLoader(
             context,
-            ['assets/audio/music-loop-01.mp3'],
+            ['assets/audio/music-loop-01.ogg'],
             finishedLoading
         );
         gain = initialVolume;
@@ -499,22 +499,22 @@ var sfx = (function() {
         var bufferLoader = new BufferLoader(
             context,
             [
-                'assets/audio/swoosh-soft-01.mp3',
-                'assets/audio/swoosh-soft-02.mp3',
-                'assets/audio/swoosh-soft-03.mp3',
-                'assets/audio/swoosh-hard-01.mp3',
-                'assets/audio/swoosh-hard-02.mp3',
-                'assets/audio/swoosh-hard-03.mp3',
-                'assets/audio/swoosh-hard-04.mp3',
-                'assets/audio/swoosh-hard-05.mp3',
-                'assets/audio/swoosh-hard-06.mp3',
-                'assets/audio/punch-hard-01.mp3',
-                'assets/audio/punch-hard-02.mp3',
-                'assets/audio/punch-hard-03.mp3',
-                'assets/audio/punch-hard-04.mp3',
-                'assets/audio/punch-hard-05.mp3',
-                'assets/audio/punch-hard-06.mp3',
-                'assets/audio/punch-hard-07.mp3'
+                'assets/audio/swoosh-soft-01.ogg',
+                'assets/audio/swoosh-soft-02.ogg',
+                'assets/audio/swoosh-soft-03.ogg',
+                'assets/audio/swoosh-hard-01.ogg',
+                'assets/audio/swoosh-hard-02.ogg',
+                'assets/audio/swoosh-hard-03.ogg',
+                'assets/audio/swoosh-hard-04.ogg',
+                'assets/audio/swoosh-hard-05.ogg',
+                'assets/audio/swoosh-hard-06.ogg',
+                'assets/audio/punch-hard-01.ogg',
+                'assets/audio/punch-hard-02.ogg',
+                'assets/audio/punch-hard-03.ogg',
+                'assets/audio/punch-hard-04.ogg',
+                'assets/audio/punch-hard-05.ogg',
+                'assets/audio/punch-hard-06.ogg',
+                'assets/audio/punch-hard-07.ogg'
             ],
             finishedLoading
         );

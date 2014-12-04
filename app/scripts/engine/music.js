@@ -20,7 +20,7 @@ var music = (function() {
     module.load = function(initialVolume) {
         var bufferLoader = new BufferLoader(
             context,
-            ['assets/audio/music-loop-01.mp3'],
+            ['assets/audio/music-loop-01.ogg'],
             finishedLoading
         );
         gain = initialVolume;
