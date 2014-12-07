@@ -721,7 +721,6 @@ function SoundSet() {
             randomSound.setGain(volume);
            // randomSound.setPosition(0, 0, 0);
             randomSound.play(null, null, soundEnded);
-            console.log('sfx volume: ' + volume);
             isPlaying = true;
         }
     };

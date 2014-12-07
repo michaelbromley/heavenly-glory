@@ -43,44 +43,13 @@ body {
   display: none;
   position: relative;
 
-  .canvas-container {
-    position: relative;
-    padding-left: 0;
-    padding-right: 0;
-    margin-left: auto;
-    margin-right: auto;
-  }
-
   canvas#output {
-    position: absolute;
     top: 0;
     left: 0;
     right: 0;
     margin-left:auto;
     margin-right:auto;
   }
-
-  canvas#effect {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    margin-left:auto;
-    margin-right:auto;
-  }
-
-  #effect-overlay {
-    position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        margin-left:auto;
-        margin-right:auto;
-    background-color: red;
-    mix-blend-mode: multiply;
-    display: none;
-  }
-
 
   .letterbox {
     position: absolute;
