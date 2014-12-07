@@ -83,16 +83,31 @@ body {
   }
   .settings-panel {
     position: absolute;
-    bottom: 50px;
-    left: 10px;
+    display: table-cell;
+    vertical-align: middle;
+    bottom: 10px;
+    left: 50px;
     border: 1px solid #666;
-    border-radius: 10px;
     background-color: #333;
     color: #ddd;
-    width: 300px;
-    padding: 20px;
+    width: 600px;
+    padding: 5px;
     &.hidden {
       display: none;
+    }
+
+    opacity: 0.6;
+    transition: opacity 0.3s;
+    &:hover {
+      opacity: 1;
+    }
+
+    label {
+      vertical-align: middle;
+      margin: 0 10px;
+    }
+    input[type="range"] {
+      vertical-align: middle;
     }
   }
 }
@@ -101,6 +116,7 @@ body {
   position: absolute;
   right: 10px;
   bottom: 10px;
+  z-index: 20;
 }
 
 .splash {
@@ -215,14 +231,14 @@ body {
     transition: all 0.3s;
 
     &:link, &:visited {
-      color: #aaa;
-      background-color: #333;
+      color: white;
+      background-color: darkred;
       text-decoration: none;
-      border-color: #666;
+      border-color: darkred;
     }
 
     &:hover {
-      background-color: darkred;
+      background-color: red;
       color: white;
       border-color: red;
     }

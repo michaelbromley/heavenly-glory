@@ -104,6 +104,7 @@ function initSequencer() {
         $('body').addClass('theater');
         $('.output-container').show();
         $('.overlay').removeClass('hidden');
+        $('.settings-panel').removeClass('hidden');
     });
     sequencer.registerEvent(1500, function() {
         $('.title-hg').removeClass('hidden');
