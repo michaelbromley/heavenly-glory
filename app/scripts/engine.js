@@ -770,7 +770,8 @@ var hgEngine = (function() {
         motionDetector.init();
         outputEffect.init(canvasOut, w, h);
         sfx.loadSounds();
-        music.load(0.6);
+        sfx.setGain(3);
+        music.load(0.5);
         createVideoElement();
         startCapturing(onPlayCallback);
     };
