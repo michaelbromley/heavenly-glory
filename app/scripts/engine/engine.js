@@ -37,6 +37,7 @@ var hgEngine = (function() {
         canvasOut = outputElement;
         contextOut = canvasOut.getContext('2d');
         motionDetector.init();
+        outputEffect.init(canvasOut, w, h);
         sfx.loadSounds();
         music.load(0.6);
         createVideoElement();
@@ -130,15 +131,13 @@ var hgEngine = (function() {
 
         drawVideo();
         motionData = motionDetector.analyze(contextOut, showDebugCanvas);
+        outputEffect.drawOverlay(motionData);
         sfx.generate(motionData);
         requestAnimationFrame(update);
     }
 
-    /*function drawVideo() {
-        contextOut.drawImage(video, 0, 0, video.width, video.height);
-    }*/
-
     function drawVideo() {
+
         try {
             contextOut.drawImage(video, 0, 0, video.width, video.height);
         } catch (e) {

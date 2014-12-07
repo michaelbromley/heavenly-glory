@@ -17,7 +17,7 @@ $('.start').on('click', function(e) {
         initSequencer();
         setTimeout(function () {
             startMovie(onMovieStarted);
-        }, 3500);
+        }, /*3500*/ 1);
     } else {
         $('.splash').hide();
         $('.no-support-warning').removeClass('hidden');
@@ -103,9 +103,9 @@ function initSequencer() {
         $('.loader').hide();
         $('body').addClass('theater');
         $('.output-container').show();
-        $('.overlay').removeClass('hidden');
+        //$('.overlay').removeClass('hidden');
     });
-    sequencer.registerEvent(1500, function() {
+    /*sequencer.registerEvent(1500, function() {
         $('.title-hg').removeClass('hidden');
     });
     sequencer.registerEvent(4000, function() {
@@ -126,7 +126,7 @@ function initSequencer() {
     sequencer.registerEvent(30000, function() {
         $('.overlay').addClass('hidden');
         hgEngine.fadeOutMusic();
-    });
+    });*/
 }
 
 /**

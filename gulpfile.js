@@ -20,6 +20,7 @@ gulp.task('styles', function () {
 gulp.task('engine', function() {
     return gulp.src([
         'app/scripts/engine/motionDetector.js',
+        'app/scripts/engine/outputEffect.js',
         'app/scripts/engine/audioUtils.js',
         'app/scripts/engine/music.js',
         'app/scripts/engine/sfx.js',
@@ -75,7 +76,7 @@ gulp.task('fonts', function () {
 });
 
 gulp.task('extras', function () {
-    return gulp.src(['app/*.*', '!app/*.html'], { dot: true })
+    return gulp.src(['app/*.*', 'app/assets*/**/*.*', '!app/*.html'], { dot: true })
         .pipe(gulp.dest('dist'));
 });
 

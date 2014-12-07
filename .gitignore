@@ -4,6 +4,7 @@ node_modules
 app/bower_components
 .idea
 assets_source
+dist
 
 # Windows image file caches
 Thumbs.db
