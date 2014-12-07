@@ -5,7 +5,8 @@ a cool swooshing air sound? Ever wanted your punches and kicks to make amazing [
 
 Yes, yes and yes?
 
-You are in luck. Thanks to the power of the modern web platform, you can now experience all of this and more.
+Martial arts experts train for years - often decades - to master the skills needed to create these amazing sound effects.
+Thanks to the power of the modern web platform, *you* can now experience what it feels like to possess such skills.
 
 ## [Try The Demo](http://www.michaelbromley.co.uk/experiments/heavenly-glory)
 
@@ -22,8 +23,10 @@ This is an experiment in using the (getUserMedia)[https://developer.mozilla.org/
 
 - Variable sensitivity to motion
 - View the motion detection canvas to see what it sees
+- Customize the movie title and star name, which is encoded in the URL hash for sharing
 - Real kung fu sounds
 - Feel powerful and cool
+- Also works great with kids/babies and animals
 
 ## Browser Support
 
