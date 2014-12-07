@@ -12,12 +12,12 @@ Thanks to the power of the modern web platform, *you* can now experience what it
 
 ## What is it?
 
-This is an experiment in using the (getUserMedia)[https://developer.mozilla.org/en-US/docs/NavigatorUserMedia.getUserMedia]
+This is an experiment in using the [getUserMedia](https://developer.mozilla.org/en-US/docs/NavigatorUserMedia.getUserMedia)
  and [Web Audio](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API) APIs to implement simple motion detection which triggers
  audio playback.
 
- The motions detection is based on a method outlined in (this article by Soundstep)[http://www.adobe.com/devnet/archive/html5/articles/javascript-motion-detection.html]
- and borrows from an implementation at (ReallyGood/js-motion-detection)[https://github.com/ReallyGood/js-motion-detection].
+ The motions detection is based on a method outlined in [this article by Soundstep](http://www.adobe.com/devnet/archive/html5/articles/javascript-motion-detection.html)
+ and borrows from an implementation at [ReallyGood/js-motion-detection](https://github.com/ReallyGood/js-motion-detection).
 
 ## Features
 
