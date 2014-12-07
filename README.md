@@ -18,6 +18,13 @@ This is an experiment in using the (getUserMedia)[https://developer.mozilla.org/
  The motions detection is based on a method outlined in (this article by Soundstep)[http://www.adobe.com/devnet/archive/html5/articles/javascript-motion-detection.html]
  and borrows from an implementation at (ReallyGood/js-motion-detection)[https://github.com/ReallyGood/js-motion-detection].
 
+## Features
+
+- Variable sensitivity to motion
+- View the motion detection canvas to see what it sees
+- Real kung fu sounds
+- Feel powerful and cool
+
 ## Browser Support
 
 Currently the browsers that support both getUserMedia and Web Audio are Chrome, Firefox and Opera.
