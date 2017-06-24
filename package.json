@@ -1,8 +1,12 @@
 {
   "name": "heavenly-glory",
   "version": "0.0.0",
+  "scripts": {
+    "bower:install": "bower install"
+  },
   "dependencies": {},
   "devDependencies": {
+    "bower": "^1.8.0",
     "connect": "^2.14.4",
     "connect-livereload": "^0.4.0",
     "gulp": "^3.6.0",
@@ -10,6 +14,7 @@
     "gulp-bower-files": "^0.2.1",
     "gulp-cache": "^0.1.1",
     "gulp-clean": "^0.2.4",
+    "gulp-concat": "^2.4.2",
     "gulp-csso": "^0.2.6",
     "gulp-filter": "^0.4.1",
     "gulp-flatten": "^0.0.2",
@@ -21,11 +26,10 @@
     "gulp-size": "^0.3.0",
     "gulp-uglify": "^0.2.1",
     "gulp-useref": "^0.4.2",
+    "gulp-wrap": "^0.5.0",
     "jshint-stylish": "^0.2.0",
     "opn": "^0.1.1",
-    "wiredep": "^1.4.3",
-    "gulp-wrap": "^0.5.0",
-    "gulp-concat": "^2.4.2"
+    "wiredep": "^1.4.3"
   },
   "engines": {
     "node": ">=0.10.0"
