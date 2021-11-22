@@ -1,4 +1,6 @@
-var sfx = (function() {
+import {BufferLoader, Sound} from './audioUtils.js';
+
+export const sfx = (function () {
 
     var module = {},
         sounds = {},
@@ -7,15 +9,15 @@ var sfx = (function() {
         areaWidth = 640,
         areaHeight = 480;
 
-    // Fix up prefixing
-    window.AudioContext = window.AudioContext || window.webkitAudioContext;
-    if (window.AudioContext) {
-        context = new AudioContext();
-        masterGain = context.createGain();
-        masterGain.connect(context.destination);
-    }
+    module.loadSounds = function () {
+        // Fix up prefixing
+        window.AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (window.AudioContext) {
+            context = new AudioContext();
+            masterGain = context.createGain();
+            masterGain.connect(context.destination);
+        }
 
-    module.loadSounds = function() {
         var bufferLoader = new BufferLoader(
             context,
             [
@@ -54,7 +56,7 @@ var sfx = (function() {
             newSound,
             soundSet = new SoundSet();
 
-        for (i = start; i <= end; i++ ) {
+        for (i = start; i <= end; i++) {
             newSound = new Sound(bufferList[i], context, masterGain);
             soundSet.addSound(newSound);
         }
@@ -69,22 +71,22 @@ var sfx = (function() {
      * @param width
      * @param height
      */
-    module.setAreaDimensions = function(width, height) {
+    module.setAreaDimensions = function (width, height) {
         areaWidth = width;
         areaHeight = height;
     };
 
-    module.setGain = function(value) {
+    module.setGain = function (value) {
         masterGain.gain.value = value;
     };
 
 
-    module.generate = function(motionData) {
+    module.generate = function (motionData) {
         var playSwooshHard = {},
             playSwooshSoft = {},
             playPunch = {};
 
-        motionData.forEach(function(motionValue, i) {
+        motionData.forEach(function (motionValue, i) {
             if (60 < motionValue) {
                 playPunch.triggered = true;
                 playPunch.volume = motionValue / 100;
@@ -155,17 +157,17 @@ function SoundSet() {
     var sounds = [],
         isPlaying = false;
 
-    this.addSound = function(item) {
+    this.addSound = function (item) {
         sounds.push(item);
     };
 
-    this.trigger = function(volume, x, y) {
+    this.trigger = function (volume, x, y) {
         var randomSound;
 
         if (!isPlaying) {
             randomSound = sounds[Math.floor(Math.random() * sounds.length)];
             randomSound.setGain(volume);
-           // randomSound.setPosition(0, 0, 0);
+            // randomSound.setPosition(0, 0, 0);
             randomSound.play(null, null, soundEnded);
             isPlaying = true;
         }

@@ -11,7 +11,7 @@
  * @param defaultOutputNode
  * @constructor
  */
-function Sound(buffer, context, defaultOutputNode) {
+export function Sound(buffer, context, defaultOutputNode) {
     var source,
         defaultOutputNode = defaultOutputNode || context.destination,
         gain = context.createGain(),
@@ -59,7 +59,7 @@ function Sound(buffer, context, defaultOutputNode) {
  * @param callback
  * @constructor
  */
-function BufferLoader(context, urlList, callback) {
+export function BufferLoader(context, urlList, callback) {
     this.context = context;
     this.urlList = urlList;
     this.onload = callback;

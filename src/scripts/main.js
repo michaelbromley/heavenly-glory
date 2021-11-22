@@ -1,6 +1,12 @@
 /**
  * Created by Michael on 21/11/2014.
  */
+import { hgEngine } from './engine/engine.js';
+import { motionDetector } from './engine/motionDetector.js';
+import { music } from './engine/music.js';
+import { outputEffect } from './engine/outputEffect.js';
+import { sfx } from './engine/sfx.js';
+import { sequencer } from './sequencer.js';
 
 readTitles();
 

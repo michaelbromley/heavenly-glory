@@ -2,7 +2,7 @@
  * Created by Michael on 29/11/2014.
  */
 
-var sequencer = (function() {
+export const sequencer = (function() {
 
     var module = {},
         events = [],

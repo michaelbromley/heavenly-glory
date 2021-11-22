@@ -2,7 +2,7 @@
  * This module adds a red "blood" blend overlay to the output when the motion activity
  * goes above a certain threshold.
  */
-var outputEffect = (function() {
+export const outputEffect = (function() {
 
     var module = {},
         contextOut,

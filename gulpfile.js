@@ -7,7 +7,7 @@ var gulp = require('gulp');
 var $ = require('gulp-load-plugins')();
 
 gulp.task('styles', function () {
-    return gulp.src('app/styles/main.scss')
+    return gulp.src('src/styles/main.scss')
         .pipe($.rubySass({
             style: 'expanded',
             precision: 10
@@ -19,20 +19,20 @@ gulp.task('styles', function () {
 
 gulp.task('engine', function() {
     return gulp.src([
-        'app/scripts/engine/motionDetector.js',
-        'app/scripts/engine/outputEffect.js',
-        'app/scripts/engine/audioUtils.js',
-        'app/scripts/engine/music.js',
-        'app/scripts/engine/sfx.js',
-        'app/scripts/engine/engine.js'
+        'src/scripts/engine/motionDetector.js',
+        'src/scripts/engine/outputEffect.js',
+        'src/scripts/engine/audioUtils.js',
+        'src/scripts/engine/music.js',
+        'src/scripts/engine/sfx.js',
+        'src/scripts/engine/engine.js'
     ])
         .pipe($.concat('engine.js'))
-        .pipe($.wrap( { src: 'app/scripts/engine/wrapper.txt' }))
-        .pipe(gulp.dest('app/scripts'));
+        .pipe($.wrap( { src: 'src/scripts/engine/wrapper.txt' }))
+        .pipe(gulp.dest('src/scripts'));
 });
 
 gulp.task('scripts', ['engine'], function () {
-    return gulp.src('app/scripts/**/*.js')
+    return gulp.src('src/scripts/**/*.js')
         .pipe($.jshint())
         .pipe($.jshint.reporter(require('jshint-stylish')))
         .pipe($.size());
@@ -42,8 +42,8 @@ gulp.task('html', ['styles', 'scripts'], function () {
     var jsFilter = $.filter('**/*.js');
     var cssFilter = $.filter('**/*.css');
 
-    return gulp.src('app/*.html')
-        .pipe($.useref.assets({searchPath: '{.tmp,app}'}))
+    return gulp.src('src/*.html')
+        .pipe($.useref.assets({searchPath: '{.tmp,src}'}))
         .pipe(jsFilter)
         .pipe($.uglify())
         .pipe(jsFilter.restore())
@@ -57,7 +57,7 @@ gulp.task('html', ['styles', 'scripts'], function () {
 });
 
 gulp.task('images', function () {
-    return gulp.src('app/images/**/*')
+    return gulp.src('src/images/**/*')
         .pipe($.cache($.imagemin({
             optimizationLevel: 3,
             progressive: true,
@@ -76,7 +76,7 @@ gulp.task('fonts', function () {
 });
 
 gulp.task('extras', function () {
-    return gulp.src(['app/*.*', 'app/assets*/**/*.*', '!app/*.html'], { dot: true })
+    return gulp.src(['src/*.*', 'src/assets*/**/*.*', '!src/*.html'], { dot: true })
         .pipe(gulp.dest('dist'));
 });
 
@@ -94,9 +94,9 @@ gulp.task('connect', function () {
     var connect = require('connect');
     var app = connect()
         .use(require('connect-livereload')({ port: 35729 }))
-        .use(connect.static('app'))
+        .use(connect.static('src'))
         .use(connect.static('.tmp'))
-        .use(connect.directory('app'));
+        .use(connect.directory('src'));
 
     require('http').createServer(app)
         .listen(9000)
@@ -113,17 +113,17 @@ gulp.task('serve', ['connect', 'styles'], function () {
 gulp.task('wiredep', function () {
     var wiredep = require('wiredep').stream;
 
-    gulp.src('app/styles/*.scss')
+    gulp.src('src/styles/*.scss')
         .pipe(wiredep({
-            directory: 'app/bower_components'
+            directory: 'src/bower_components'
         }))
-        .pipe(gulp.dest('app/styles'));
+        .pipe(gulp.dest('src/styles'));
 
-    gulp.src('app/*.html')
+    gulp.src('src/*.html')
         .pipe(wiredep({
-            directory: 'app/bower_components'
+            directory: 'src/bower_components'
         }))
-        .pipe(gulp.dest('app'));
+        .pipe(gulp.dest('src'));
 });
 
 gulp.task('watch', ['connect', 'serve'], function () {
@@ -132,16 +132,16 @@ gulp.task('watch', ['connect', 'serve'], function () {
     // watch for changes
 
     gulp.watch([
-        'app/*.html',
+        'src/*.html',
         '.tmp/styles/**/*.css',
-        'app/scripts/**/*.js',
-        'app/images/**/*'
+        'src/scripts/**/*.js',
+        'src/images/**/*'
     ]).on('change', function (file) {
         server.changed(file.path);
     });
 
-    gulp.watch('app/styles/**/*.scss', ['styles']);
-    gulp.watch('app/scripts/**/*.js', ['scripts']);
-    gulp.watch('app/images/**/*', ['images']);
+    gulp.watch('src/styles/**/*.scss', ['styles']);
+    gulp.watch('src/scripts/**/*.js', ['scripts']);
+    gulp.watch('src/images/**/*', ['images']);
     gulp.watch('bower.json', ['wiredep']);
 });

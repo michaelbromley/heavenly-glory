@@ -1,9 +1,15 @@
+
+import { motionDetector } from './motionDetector.js';
+import { music } from './music.js';
+import { outputEffect } from './outputEffect.js';
+import { sfx } from './sfx.js';
+
 /**
  * The hgEngine (heavenly-glory-engine) object ties together the video capture via `getUserMedia()`, the motion
  * detection, and the triggering of sound effects via the Web Audio API in response to detected motion.
  *
  */
-var hgEngine = (function() {
+export const hgEngine = (function() {
 
     var module = {},
         isStreaming = false,
@@ -93,34 +99,46 @@ var hgEngine = (function() {
 
     function startCapturing(onPlayCallback) {
 
-        navigator.getUserMedia = (navigator.getUserMedia ||
-        navigator.webkitGetUserMedia ||
-        navigator.mozGetUserMedia ||
-        navigator.msGetUserMedia);
-        if (navigator.getUserMedia) {
-            // Request access to video only
-            navigator.getUserMedia({
-                    video:true,
-                    audio:false
-                },
-                function(stream) {
-                    var url = window.URL || window.webkitURL;
-                    video.src = url ? url.createObjectURL(stream) : stream;
-                    video.play();
-                    music.play();
-                    if (onPlayCallback) {
-                        onPlayCallback();
-                    }
-                },
-                function(error) {
-                    alert('Something went wrong. (error code ' + error.code + ')');
-                    return;
-                }
-            );
-        } else {
-            alert('Sorry, the browser you are using doesn\'t support getUserMedia');
-            return;
-        }
+
+        navigator.mediaDevices.getUserMedia({ video: true, audio: false }).then(stream => {
+
+            video.srcObject = stream;
+                               video.play();
+                               music.play();
+                               if (onPlayCallback) {
+                                   onPlayCallback();
+                               }
+        });
+
+
+        // navigator.getUserMedia = (navigator.getUserMedia ||
+        // navigator.webkitGetUserMedia ||
+        // navigator.mozGetUserMedia ||
+        // navigator.msGetUserMedia);
+        // if (navigator.getUserMedia) {
+        //     // Request access to video only
+        //     navigator.getUserMedia({
+        //             video:true,
+        //             audio:false
+        //         },
+        //         function(stream) {
+        //             var url = window.URL || window.webkitURL;
+        //             video.src = url ? url.createObjectURL(stream) : stream;
+        //             video.play();
+        //             music.play();
+        //             if (onPlayCallback) {
+        //                 onPlayCallback();
+        //             }
+        //         },
+        //         function(error) {
+        //             alert('Something went wrong. (error code ' + error.code + ')');
+        //             return;
+        //         }
+        //     );
+        // } else {
+        //     alert('Sorry, the browser you are using doesn\'t support getUserMedia');
+        //     return;
+        // }
 
     }
 
@@ -157,5 +175,3 @@ var hgEngine = (function() {
     return module;
 
 })();
-
-window.hgEngine = hgEngine;

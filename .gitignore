@@ -1,7 +1,7 @@
 .sass-cache
 .tmp
 node_modules
-app/bower_components
+src/bower_components
 .idea
 assets_source
 dist

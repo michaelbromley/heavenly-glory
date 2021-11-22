@@ -15,7 +15,7 @@
  * @returns {{analyze: analyze}}
  * @constructor
  */
-var motionDetector = (function() {
+export const motionDetector = (function() {
 
     var module = {},
         canvasBlend,

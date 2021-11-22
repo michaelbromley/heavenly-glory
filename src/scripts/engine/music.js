@@ -1,8 +1,9 @@
 /**
  * Created by Michael on 29/11/2014.
  */
+import {BufferLoader, Sound} from './audioUtils.js';
 
-var music = (function() {
+export const music = (function () {
 
     var module = {},
         masterGain,
@@ -10,14 +11,15 @@ var music = (function() {
         musicLoop,
         gain = 1;
 
-    window.AudioContext = window.AudioContext || window.webkitAudioContext;
-    if (window.AudioContext) {
-        context = new AudioContext();
-        masterGain = context.createGain();
-        masterGain.connect(context.destination);
-    }
 
-    module.load = function(initialVolume) {
+    module.load = function (initialVolume) {
+        window.AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (window.AudioContext) {
+            context = new AudioContext();
+            masterGain = context.createGain();
+            masterGain.connect(context.destination);
+        }
+
         var bufferLoader = new BufferLoader(
             context,
             ['assets/audio/music-loop-01.ogg'],
@@ -32,20 +34,20 @@ var music = (function() {
         musicLoop.setGain(gain);
     }
 
-    module.play = function() {
+    module.play = function () {
         if (typeof musicLoop !== 'undefined') {
             musicLoop.play(null, true);
         }
     };
 
-    module.setVolume = function(val) {
+    module.setVolume = function (val) {
         if (0 <= val && val <= 1) {
             gain = val;
             musicLoop.setGain(gain);
         }
     };
 
-    module.fadeOut = function() {
+    module.fadeOut = function () {
         fadeOut();
     };
 
