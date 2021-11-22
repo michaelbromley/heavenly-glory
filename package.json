@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "scripts": {
     "watch:js": "esbuild --bundle src/scripts/main.js --outfile=dist/main.js --watch",
-    "watch:scss": "sass src/styles/main.scss dist/main.css --watch"
+    "watch:scss": "sass src/styles/main.scss dist/main.css --watch",
+    "build": "esbuild --bundle --minify --sourcemap src/scripts/main.js --outfile=dist/main.js && sass src/styles/main.scss dist/main.css"
   },
   "devDependencies": {
     "esbuild": "^0.13.15",

@@ -10,37 +10,39 @@ import { sequencer } from './sequencer.js';
 
 readTitles();
 
-$('.start').on('click', function(e) {
+document.querySelector('.start').addEventListener('click', function(e) {
     e.preventDefault();
 
     if (hgEngine.browserSupportCheck()) {
-        $('.splash').hide();
-        $('.loader').show();
+        document.querySelector('.splash').classList.add('hidden');
+        document.querySelector('.loader').classList.remove('hidden');
         setTimeout(function () {
-            $('.loader').removeClass('hidden');
+            document.querySelector('.loader').classList.remove('hidden');
         }, 100);
         setTitles();
         initSequencer();
+        sfx.loadSounds();
+        music.load(0.5);
         setTimeout(function () {
             startMovie(onMovieStarted);
         }, 3500);
     } else {
-        $('.splash').hide();
-        $('.no-support-warning').removeClass('hidden');
+        document.querySelector('.splash').classList.remove('hidden');
+        document.querySelector('.no-support-warning').classList.remove('hidden');
     }
 });
 
-$('.settings-icon').on('click', function() {
-    $('.settings-panel').toggleClass('hidden');
+document.querySelector('.settings-icon').addEventListener('click', function() {
+    document.querySelector('.settings-panel').classList.toggle('hidden');
 });
 
-$('.display-debug').on('change', function() {
-    hgEngine.showDebugCanvas($(this).is(':checked'));
+document.querySelector('.display-debug').addEventListener('change', function() {
+    hgEngine.showDebugCanvas(document.querySelector('.display-debug').checked);
 });
 
-$('.sensitivity-slider').on('change', function() {
-    var val = $(this).val();
-    $('.sensitivity-label').html(val);
+document.querySelector('.sensitivity-slider').addEventListener('change', function() {
+    var val = document.querySelector('.sensitivity-slider').value;
+    document.querySelector('.sensitivity-label').innerHTML = (val);
     hgEngine.setSensitivity(val);
 });
 
@@ -53,16 +55,16 @@ function readTitles() {
         movieName = titles[0] || 'Enter The Webcam',
         actorName = titles[1] || 'This Person';
 
-    $('.movie-name').html(titles[0]);
-    $('.actor-name').html(titles[1]);
+    document.querySelector('.movie-name').innerHTML = (movieName);
+    document.querySelector('.actor-name').innerHTML = (actorName);
 }
 
 function setTitles() {
-    var movieName = $('.movie-name').html(),
-        actorName = $('.actor-name').html();
+    var movieName = document.querySelector('.movie-name').innerHTML,
+        actorName = document.querySelector('.actor-name').innerHTML;
 
-    $('.movie-name-title').html(movieName);
-    $('.actor-name-title').html(actorName);
+    document.querySelector('.movie-name-title').innerHTML = movieName;
+    document.querySelector('.actor-name-title').innerHTML = actorName;
 
     encodeTitlesToHash(movieName, actorName);
 }
@@ -106,32 +108,33 @@ function startMovie(onPlayCallback) {
 
 function initSequencer() {
     sequencer.registerEvent(0, function() {
-        $('.loader').hide();
-        $('body').addClass('theater');
-        $('.output-container').show();
-        $('.overlay').removeClass('hidden');
-        $('.settings-panel').removeClass('hidden');
+        document.querySelector('.loader').classList.add('hidden');
+        document.querySelector('body').classList.add('theater');
+        document.querySelector('.output-container').classList.remove('hidden');
+        document.querySelector('.overlay').classList.remove('hidden');
+        document.querySelector('.settings-panel').classList.remove('hidden');
+        document.querySelector('.credits').classList.add('hidden');
     });
     sequencer.registerEvent(1500, function() {
-        $('.title-hg').removeClass('hidden');
+        document.querySelector('.title-hg').classList.remove('hidden');
     });
     sequencer.registerEvent(4000, function() {
-        $('.title-hg').addClass('hidden');
+        document.querySelector('.title-hg').classList.add('hidden');
     });
     sequencer.registerEvent(6000, function() {
-        $('.title-movie').removeClass('hidden');
+        document.querySelector('.title-movie').classList.remove('hidden');
     });
     sequencer.registerEvent(9000, function() {
-        $('.title-movie').addClass('hidden');
+        document.querySelector('.title-movie').classList.add('hidden');
     });
     sequencer.registerEvent(11000, function() {
-        $('.title-actor').removeClass('hidden');
+        document.querySelector('.title-actor').classList.remove('hidden');
     });
     sequencer.registerEvent(12000, function() {
-        $('.overlay').addClass('transparent');
+        document.querySelector('.overlay').classList.add('transparent');
     });
     sequencer.registerEvent(30000, function() {
-        $('.overlay').addClass('hidden');
+        document.querySelector('.overlay').classList.add('hidden');
         hgEngine.fadeOutMusic();
     });
 }
@@ -149,39 +152,3 @@ function utf8_to_b64(str) {
 function b64_to_utf8(str) {
     return unescape(decodeURIComponent(window.atob(str)));
 }
-
-
-// http://paulirish.com/2011/requestanimationframe-for-smart-animating/
-// http://my.opera.com/emoller/blog/2011/12/20/requestanimationframe-for-smart-er-animating
-
-// requestAnimationFrame polyfill by Erik MÃ¶ller. fixes from Paul Irish and Tino Zijdel
-
-// MIT license
-(function() {
-    var lastTime = 0;
-    var vendors = ['ms', 'moz', 'webkit', 'o'];
-    for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
-        window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
-        window.cancelAnimationFrame = window[vendors[x]+'CancelAnimationFrame']
-                                   || window[vendors[x]+'CancelRequestAnimationFrame'];
-    }
-
-    if (!window.requestAnimationFrame) {
-        window.requestAnimationFrame = function (callback, element) {
-            var currTime = new Date().getTime();
-            var timeToCall = Math.max(0, 16 - (currTime - lastTime));
-            var id = window.setTimeout(function () {
-                    callback(currTime + timeToCall);
-                },
-                timeToCall);
-            lastTime = currTime + timeToCall;
-            return id;
-        };
-    }
-
-    if (!window.cancelAnimationFrame) {
-        window.cancelAnimationFrame = function (id) {
-            clearTimeout(id);
-        };
-    }
-}());

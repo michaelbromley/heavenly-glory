@@ -44,9 +44,9 @@ export const hgEngine = (function() {
         contextOut = canvasOut.getContext('2d');
         motionDetector.init();
         outputEffect.init(canvasOut, w, h);
-        sfx.loadSounds();
+        // sfx.loadSounds();
         sfx.setGain(3);
-        music.load(0.5);
+        // music.load(0.5);
         createVideoElement();
         startCapturing(onPlayCallback);
     };

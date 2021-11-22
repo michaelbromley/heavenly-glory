@@ -48,7 +48,7 @@ export function Sound(buffer, context, defaultOutputNode) {
     };
 
     this.stop = function() {
-        source.stop();
+        source?.stop();
     };
 }
 

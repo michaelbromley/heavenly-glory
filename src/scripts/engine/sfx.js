@@ -105,11 +105,11 @@ export const sfx = (function () {
         });
 
         if (playPunch.triggered) {
-            sounds.punchHard.trigger(playPunch.volume, playPunch.pan.x, playPunch.pan.y);
+            sounds.punchHard?.trigger(playPunch.volume, playPunch.pan.x, playPunch.pan.y);
         } else if (playSwooshHard.triggered) {
-            sounds.swooshHard.trigger(playSwooshHard.volume, playSwooshHard.pan.x, playSwooshHard.pan.y);
+            sounds.swooshHard?.trigger(playSwooshHard.volume, playSwooshHard.pan.x, playSwooshHard.pan.y);
         } else if (playSwooshSoft.triggered) {
-            sounds.swooshSoft.trigger(playSwooshSoft.volume, playSwooshSoft.pan.x, playSwooshSoft.pan.y);
+            sounds.swooshSoft?.trigger(playSwooshSoft.volume, playSwooshSoft.pan.x, playSwooshSoft.pan.y);
         }
     };
 

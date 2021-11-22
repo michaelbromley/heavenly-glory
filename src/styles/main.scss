@@ -4,357 +4,403 @@ $title-font: 'Carter One', cursive;
 $poster-font: 'Six Caps', sans-serif;
 
 body {
-  background-color: #eee;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  color: #333;
-  transition: background-color 1s;
+    padding: 0;
+    margin: 0;
+    background-color: #eee;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #333;
+    transition: background-color 1s;
+    overflow-x: hidden;
 
-  &.theater {
-    background-color: #000000;
-    overflow: hidden;
-  }
+    &.theater {
+        background-color: #000000;
+        overflow: hidden;
+    }
 }
 
 .browsehappy {
-  margin: 0.2em 0;
-  background: #ccc;
-  color: #000;
-  padding: 0.2em 0;
+    margin: 0.2em 0;
+    background: #ccc;
+    color: #000;
+    padding: 0.2em 0;
 }
 
 .no-support-warning {
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  background-color: #ddd;
-  font-family: $title-font;
-  text-align: center;
-  font-size: 2em;
-  &.hidden {
-    display: none;
-  }
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: #ddd;
+    font-family: $title-font;
+    text-align: center;
+    font-size: 2em;
+
+    &.hidden {
+        display: none;
+    }
 }
 
 .output-container {
-  width: 100%;
-  text-align: center;
-  display: none;
-  position: relative;
-
-  canvas#output {
-    top: 0;
-    left: 0;
-    right: 0;
-    margin-left:auto;
-    margin-right:auto;
-  }
-
-  .letterbox {
-    position: absolute;
-    left: 0;
     width: 100%;
-    height: 10vh;
-    background-color: #000000;
-    &.top {
-      top: 0;
+    text-align: center;
+    position: relative;
+    top: 0;
+
+    &.hidden {
+        display: none;
     }
-    &.bottom {
-      bottom: 0;
+
+    canvas#output {
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        margin-left: auto;
+        margin-right: auto;
     }
-  }
+
+    .letterbox {
+        position: absolute;
+        left: 0;
+        width: 100%;
+        height: 10vh;
+        background-color: #000000;
+
+        &.top {
+            top: 0;
+        }
+
+        &.bottom {
+            bottom: 0;
+        }
+    }
 }
 
 .settings {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  text-align: left;
-  padding: 10px;
-  z-index: 100;
-  .settings-icon {
-    font-size: 32px;
-    color: #666;
-    cursor: pointer;
-    &:hover {
-      color: #aaa;
-    }
-  }
-  .settings-panel {
-    position: absolute;
-    display: table-cell;
-    vertical-align: middle;
-    bottom: 10px;
-    left: 50px;
-    border: 1px solid #666;
-    background-color: #333;
-    color: #ddd;
-    width: 600px;
-    padding: 5px;
-    &.hidden {
-      display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    text-align: left;
+    padding: 10px;
+    z-index: 100;
+
+    .settings-icon {
+        font-size: 32px;
+        color: #666;
+        cursor: pointer;
+
+        &:hover {
+            color: #aaa;
+        }
     }
 
-    opacity: 0.6;
-    transition: opacity 0.3s;
-    &:hover {
-      opacity: 1;
-    }
+    .settings-panel {
+        position: absolute;
+        display: table-cell;
+        vertical-align: middle;
+        bottom: 10px;
+        left: 50px;
+        border: 1px solid #666;
+        background-color: #333;
+        color: #ddd;
+        width: 600px;
+        padding: 5px;
 
-    label {
-      vertical-align: middle;
-      margin: 0 10px;
+        &.hidden {
+            display: none;
+        }
+
+        opacity: 0.6;
+        transition: opacity 0.3s;
+
+        &:hover {
+            opacity: 1;
+        }
+
+        label {
+            vertical-align: middle;
+            margin: 0 10px;
+        }
+
+        input[type="range"] {
+            vertical-align: middle;
+        }
     }
-    input[type="range"] {
-      vertical-align: middle;
-    }
-  }
 }
 
-#canvas-blend{
-  position: absolute;
-  right: 10px;
-  bottom: 10px;
-  z-index: 20;
+#canvas-blend {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    z-index: 20;
 }
 
 .splash {
-  text-transform: uppercase;
-  text-align: center;
-  top: 0;
-  left: 0;
-  width: 100%;
-  margin: auto;
-  z-index: 2;
-
-  &.hidden {
-    visibility: hidden;
-  }
-
-
-  .editable-container {
-    position: relative;
-    display: inline-block;
-
-    &:hover {
-      .edit-tooltip {
-        opacity: 1;
-      }
-    }
-    .edit-tooltip {
-      opacity: 0;
-      display: block;
-      transition: opacity 0.3s;
-      position: absolute;
-      left: -113px;
-      top: -10px;
-      width: 100px;
-      height: 80px;
-      padding: 0px;
-      background: darkred;
-      -webkit-border-radius: 10px;
-      -moz-border-radius: 10px;
-      border-radius: 10px;
-      font-size: 24px;
-      line-height: 0.7;
-      color: white;
-      i {
-        font-size: 48px;
-        display: block;
-      }
-    }
-
-    .edit-tooltip:after {
-      content: '';
-      position: absolute;
-      border-style: solid;
-      border-width: 15px 0 15px 15px;
-      border-color: transparent darkred;
-      display: block;
-      width: 0;
-      z-index: 1;
-      right: -15px;
-      top: 26px;
-    }
-    span[contenteditable]:hover {
-      color: #ce0000;
-    }
-  }
-
-  .poster {
-
-  }
-
-  .poster-text {
-    max-width: 800px;
-    margin: 0 auto 0 auto;
-    color: rgb(148, 0, 0);
-
-    font-family: $title-font;
-    font-size: 64px;
-    line-height: 0.9em;
-
-    .movie-name, .actor-name {
-      text-shadow: 0px 4px 1px rgb(45, 45, 45);
-      min-width: 100px;
-    }
-
-    &.top {
-      .detail {
-        color: #555;
-      }
-    }
-
-    &.bottom {
-      margin-top: -300px;
-      margin-bottom: 42px;
-    }
-
-    .detail {
-      font-family: $poster-font;
-      font-size: 48px;
-      color: white;
-    }
-  }
-
-  a.start {
-
-    margin: 20px 0 50px 0;
-    font-family: $title-font;
     text-transform: uppercase;
-    font-size: 32px;
-    border: 1px solid darkred;
-    border-radius: 10px;
-    padding: 10px;
-    display: inline-block;
-    transition: all 0.3s;
+    text-align: center;
+    top: 0;
+    left: 0;
+    width: 100%;
+    margin: auto;
+    z-index: 2;
 
-    &:link, &:visited {
-      color: white;
-      background-color: darkred;
-      text-decoration: none;
-      border-color: darkred;
+    &.hidden {
+        display: none;
     }
 
-    &:hover {
-      background-color: red;
-      color: white;
-      border-color: red;
+
+    .editable-container {
+        position: relative;
+        display: inline-block;
+
+        &:hover {
+            .edit-tooltip {
+                opacity: 1;
+            }
+        }
+
+        .edit-tooltip {
+            opacity: 0;
+            display: block;
+            transition: opacity 0.3s;
+            position: absolute;
+            left: -113px;
+            top: -10px;
+            width: 100px;
+            height: 80px;
+            padding: 0px;
+            background: darkred;
+            -webkit-border-radius: 10px;
+            -moz-border-radius: 10px;
+            border-radius: 10px;
+            font-size: 24px;
+            line-height: 0.7;
+            color: white;
+
+            i {
+                font-size: 48px;
+                display: block;
+            }
+        }
+
+        .edit-tooltip:after {
+            content: '';
+            position: absolute;
+            border-style: solid;
+            border-width: 15px 0 15px 15px;
+            border-color: transparent darkred;
+            display: block;
+            width: 0;
+            z-index: 1;
+            right: -15px;
+            top: 26px;
+        }
+
+        span[contenteditable]:hover {
+            color: #ce0000;
+        }
     }
-  }
+
+    .poster {
+
+    }
+
+    .poster-text {
+        max-width: 800px;
+        margin: 0 auto 0 auto;
+        color: rgb(148, 0, 0);
+
+        font-family: $title-font;
+        font-size: 64px;
+        line-height: 0.9em;
+
+        .movie-name, .actor-name {
+            text-shadow: 0px 4px 1px rgb(45, 45, 45);
+            min-width: 100px;
+        }
+
+        &.top {
+            .detail {
+                color: #555;
+            }
+        }
+
+        &.bottom {
+            margin-top: -300px;
+            margin-bottom: 42px;
+        }
+
+        .detail {
+            font-family: $poster-font;
+            font-size: 48px;
+            color: white;
+        }
+    }
+
+    a.start {
+
+        margin: 20px 0 50px 0;
+        font-family: $title-font;
+        text-transform: uppercase;
+        font-size: 32px;
+        border: 1px solid darkred;
+        border-radius: 10px;
+        padding: 10px;
+        display: inline-block;
+        transition: all 0.3s;
+
+        &:link, &:visited {
+            color: white;
+            background-color: darkred;
+            text-decoration: none;
+            border-color: darkred;
+        }
+
+        &:hover {
+            background-color: red;
+            color: white;
+            border-color: red;
+        }
+    }
 }
 
 .loader {
-  &.hidden {
-    display: none;
-    .volume, .moves, .press {
-      opacity: 0;
+    &.hidden {
+        display: none;
+
+        .volume, .moves, .press {
+            opacity: 0;
+        }
     }
-  }
 
-  padding-top: 50px;
-  text-align: center;
-  margin-bottom: 100px;
-
-  .instructions {
-    display: inline-block;
-    max-width: 300px;
+    padding-top: 50px;
     text-align: center;
-    font-family: $title-font;
-    text-transform: uppercase;
-    color: #60080b;
-    font-size: 32px;
+    margin-bottom: 100px;
 
-    &.volume {
-      transition: opacity 0.5s;
+    .instructions {
+        display: inline-block;
+        max-width: 300px;
+        text-align: center;
+        font-family: $title-font;
+        text-transform: uppercase;
+        color: #60080b;
+        font-size: 32px;
+
+        &.volume {
+            animation: 0.5s fadeIn;
+            animation-fill-mode: both;
+        }
+
+        &.moves {
+            animation: 0.5s fadeIn 1.5s;
+            animation-fill-mode: both;
+        }
+
+        &.press {
+            animation: 0.5s fadeIn 3s;
+            animation-fill-mode: both;
+        }
     }
-    &.moves {
-      transition: opacity 0.5s 1.5s;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
     }
-    &.press {
-      transition: opacity 0.5s 3s;
+    to {
+        opacity: 1;
     }
-  }
 }
 
 .overlay {
-  position: absolute;
-  z-index: 10;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  background-color: black;
-  color: darkred;
-  font-size: 24px;
-  text-align: center;
-  transition: opacity 0s, background-color 3s;
-
-  &.hidden{
-    visibility: hidden;
-    opacity: 0;
-    transition: opacity 3s, visibility 0s 3s;
-  }
-
-  &.transparent {
-    background-color: rgba(0, 0, 0, 0);
-  }
-  .title {
     position: absolute;
-    text-align: center;
-    width: 100%;
-    transition: opacity 1s;
-    font-family: $title-font;
-    text-transform: uppercase;
+    z-index: 10;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: black;
     color: darkred;
-    z-index: 50;
-    line-height: 0.85em;
-
-    &.title-hg {
-      font-family: $poster-font;
-      font-size: 64px;
-      top: 30vh;
-    }
-
-    &.title-movie {
-      top: 30vh;
-      font-size: 96px;
-      color: black;
-      text-shadow:
-      0px 0px 10px darkred,
-      -2px -2px 0 darkred,
-      2px -2px 0 darkred,
-      -2px 2px 0 darkred,
-      2px 2px 0 darkred;
-    }
-
-    &.title-actor {
-      small {
-        font-family: $poster-font;
-        color: #999;
-      }
-      top: 70vh;
-      font-size: 50px;
-    }
+    font-size: 24px;
+    text-align: center;
+    transition: opacity 0s, background-color 3s;
 
     &.hidden {
-      opacity: 0;
+        visibility: hidden;
+        opacity: 0;
+        transition: opacity 3s, visibility 0s 3s;
     }
-  }
+
+    &.transparent {
+        background-color: rgba(0, 0, 0, 0);
+    }
+
+    .title {
+        position: absolute;
+        text-align: center;
+        width: 100%;
+        transition: opacity 1s;
+        font-family: $title-font;
+        text-transform: uppercase;
+        color: darkred;
+        z-index: 50;
+        line-height: 0.85em;
+
+        &.title-hg {
+            font-family: $poster-font;
+            font-size: 64px;
+            top: 30vh;
+        }
+
+        &.title-movie {
+            top: 30vh;
+            font-size: 96px;
+            color: black;
+            text-shadow: 0px 0px 10px darkred,
+            -2px -2px 0 darkred,
+            2px -2px 0 darkred,
+            -2px 2px 0 darkred,
+            2px 2px 0 darkred;
+        }
+
+        &.title-actor {
+            small {
+                font-family: $poster-font;
+                color: #999;
+            }
+
+            top: 60vh;
+            font-size: 50px;
+        }
+
+        &.hidden {
+            opacity: 0;
+        }
+    }
 }
 
 .credits {
-  text-align: center;
-  font-family: $poster-font;
-  font-size: 40px;
-  color: #333;
-  line-height: 0.9em;
-  a:link, a:visited {
-    text-decoration: none;
-    color: #4b4b9a;
-  }
-  a:hover, a:active {
-    color: #566be3;
-  }
+    position: relative;
+    width: 100vw;
+    z-index: 20;
+    text-align: center;
+    font-family: $poster-font;
+    font-size: 40px;
+    color: #333;
+    line-height: 0.9em;
+
+    &.hidden {
+        display: none;
+    }
+
+
+    a:link, a:visited {
+        text-decoration: none;
+        color: #4b4b9a;
+    }
+
+    a:hover, a:active {
+        color: #566be3;
+    }
 }
