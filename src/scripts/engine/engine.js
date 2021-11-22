@@ -44,9 +44,7 @@ export const hgEngine = (function() {
         contextOut = canvasOut.getContext('2d');
         motionDetector.init();
         outputEffect.init(canvasOut, w, h);
-        // sfx.loadSounds();
         sfx.setGain(3);
-        // music.load(0.5);
         createVideoElement();
         startCapturing(onPlayCallback);
     };
@@ -101,44 +99,15 @@ export const hgEngine = (function() {
 
 
         navigator.mediaDevices.getUserMedia({ video: true, audio: false }).then(stream => {
-
             video.srcObject = stream;
-                               video.play();
-                               music.play();
-                               if (onPlayCallback) {
-                                   onPlayCallback();
-                               }
+            video.play();
+            music.play();
+            if (onPlayCallback) {
+                onPlayCallback();
+            }
+        }).catch(err => {
+            console.log(err);
         });
-
-
-        // navigator.getUserMedia = (navigator.getUserMedia ||
-        // navigator.webkitGetUserMedia ||
-        // navigator.mozGetUserMedia ||
-        // navigator.msGetUserMedia);
-        // if (navigator.getUserMedia) {
-        //     // Request access to video only
-        //     navigator.getUserMedia({
-        //             video:true,
-        //             audio:false
-        //         },
-        //         function(stream) {
-        //             var url = window.URL || window.webkitURL;
-        //             video.src = url ? url.createObjectURL(stream) : stream;
-        //             video.play();
-        //             music.play();
-        //             if (onPlayCallback) {
-        //                 onPlayCallback();
-        //             }
-        //         },
-        //         function(error) {
-        //             alert('Something went wrong. (error code ' + error.code + ')');
-        //             return;
-        //         }
-        //     );
-        // } else {
-        //     alert('Sorry, the browser you are using doesn\'t support getUserMedia');
-        //     return;
-        // }
 
     }
 
